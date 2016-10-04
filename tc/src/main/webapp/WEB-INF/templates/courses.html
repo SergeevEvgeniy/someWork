@@ -17,13 +17,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Project Management 101</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>NET Technology</td>
+                    <tr th:each="course: ${courses}">
+                        <td th:text="${course.id}">Id</td>
+                        <td th:text="${course.name}">Course</td>
                     </tr>
                 </tbody>
             </table>

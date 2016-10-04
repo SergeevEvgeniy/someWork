@@ -1,4 +1,4 @@
-package com.epam.tc.application;
+package com.epam.tc.config;
 
 import javax.servlet.Filter;
 
