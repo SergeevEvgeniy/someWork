@@ -1,6 +1,5 @@
 package com.epam.tc.web.controller;
 
-import com.epam.tc.model.Course;
 import com.epam.tc.service.course.CourseService;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +16,9 @@ public class CoursesController {
 
     @PostConstruct
     public void init() {
-        Course course = new Course("blablalba");
-        courseService.create(course);
+        if (courseService.getAll().isEmpty()) {
+            courseService.SetupDefCourses();
+        }
     }
 
     @RequestMapping(value = "/courses", method = RequestMethod.GET)
@@ -26,5 +26,4 @@ public class CoursesController {
         model.addAttribute("courses", courseService.getAll());
         return model;
     }
-
 }

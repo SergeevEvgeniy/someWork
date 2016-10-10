@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8"/>
+        <script th:replace="headerLinks"></script>
+    </head>
+    <body>
+        <div class="container">
+            <h2 class="form-signin-heading">Please sign in</h2>
+            <form class="form-signin" role="form" action="courses" method="get"  data-toggle="validator">
+                <div class="form-group has-feedback">
+                    <div class="input-group">
+                        <label for="inputEmail" class="sr-only">Email address</label>
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>         
+                        <input type="email" id="inputEmail" class="form-control inputV" placeholder="Email address" required autofocus>
+                    </div>
+                    <span class="glyphicon form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback">
+                    <div class="input-group">
+                        <label for="inputPassword" class="sr-only">Password</label>
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>         
+                        <input type="text" id="inputPassword" class="form-control inputV " placeholder="Password" required>
+                    </div>
+                    <span class="glyphicon form-control-feedback"></span>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" value="remember-me"> Remember me
+                    </label>
+                </div>
+                <button class="btn btn-lg btn-primary btn-block " type="submit" id="validate">Sign in</button>
+            </form>
+        </div>
+
+        <script>
+            $(function () {
+                $('#validate').click(function () {
+                    var formValid = true;
+                    $('input').each(function () {
+                        var formGroup = $(this).parents('.form-group');
+                        var glyphicon = formGroup.find('.form-control-feedback');
+                        if (($('#inputEmail').length == 0) && (($('#inputPassword').length == 0))) {
+                            formGroup.addClass('has-error').removeClass('has-success');
+                            glyphicon.addClass('glyphicon-remove').removeClass('glyphicon-ok');
+                            formValid = false;
+                        } else {
+                            formGroup.addClass('has-success').removeClass('has-error');
+                            glyphicon.addClass('glyphicon-ok').removeClass('glyphicon-remove');
+                        }
+                    });
+                });
+            });
+        </script>
+
+    </body>
+</html> 
