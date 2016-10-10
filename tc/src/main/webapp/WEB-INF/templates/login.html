@@ -2,6 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="utf-8"/>
+        <script src="//code.jquery.com/jquery-latest.js"></script>
         <script th:replace="dependenciesBootstrap"></script>
     </head>
     <body>
@@ -12,7 +13,7 @@
                     <div class="input-group">
                         <label for="inputEmail" class="sr-only">Email address</label>
                         <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>         
-                        <input type="text" id="inputEmail" class="form-control inputV" placeholder="Email address" required autofocus>
+                        <input type="email" id="inputEmail" class="form-control inputV" placeholder="Email address" required autofocus>
                     </div>
                     <span class="glyphicon form-control-feedback"></span>
                 </div>
@@ -40,7 +41,7 @@
                     $('input').each(function () {
                         var formGroup = $(this).parents('.form-group');
                         var glyphicon = formGroup.find('.form-control-feedback');
-                        if (($('#inputEmail').length == 0)&&(($('#inputPassword').length == 0))) {
+                        if (($('#inputEmail').length == 0) && (($('#inputPassword').length == 0))) {
                             formGroup.addClass('has-error').removeClass('has-success');
                             glyphicon.addClass('glyphicon-remove').removeClass('glyphicon-ok');
                             formValid = false;
