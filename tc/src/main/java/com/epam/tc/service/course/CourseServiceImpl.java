@@ -38,4 +38,24 @@ public class CourseServiceImpl implements CourseService {
     public void delete(Course course) {
         courseDao.delete(course);
     }
+
+    @Override
+    public void SetupDefCourses() {
+        Course course = new Course("Draft");
+        this.create(course);
+        course = new Course("Proposal");
+        this.create(course);
+        course = new Course("Rejected");
+        this.create(course);
+        course = new Course("New");
+        this.create(course);
+        course = new Course("Open");
+        this.create(course);
+        course = new Course("Ready");
+        this.create(course);
+        course = new Course("In Progress");
+        this.create(course);
+        course = new Course("Finished");
+        this.create(course);
+    }
 }
