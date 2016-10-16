@@ -19,6 +19,8 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -155,6 +157,15 @@ public class SpringWebConfig extends WebMvcConfigurerAdapter implements Applicat
     @Bean
     public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
         return new PersistenceExceptionTranslationPostProcessor();
+    }
+
+    @Bean(name = "userDetailsService")
+    public UserDetailsService userDetailsService() {
+        JdbcDaoImpl jdbcImpl = new JdbcDaoImpl();
+        jdbcImpl.setDataSource(dataSource());
+        jdbcImpl.setUsersByUsernameQuery("select username, password, enabled from users where username=?");
+        jdbcImpl.setAuthoritiesByUsernameQuery("select b.username, a.role from user_roles a, users b where b.name=? and a.userid=b.id");
+        return jdbcImpl;
     }
 
     /* ******************************************************************* */
