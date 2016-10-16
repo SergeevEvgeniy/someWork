@@ -1,3 +1,5 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
@@ -6,13 +8,14 @@
     </head>
     <body>
         <div class="container">
-            <h2 class="form-signin-heading">Please sign in</h2>
-            <form class="form-signin" role="form" action="courses" method="get"  data-toggle="validator">
+            <c:uri value="/j_spring_security_check" var="loginUrl" />
+            <form class="form-signin" role="form" action="${loginUrl}" method="post"  data-toggle="validator">
+                <h2 class="form-signin-heading">Please sign in</h2>
                 <div class="form-group has-feedback">
                     <div class="input-group">
                         <label for="inputEmail" class="sr-only">Email address</label>
                         <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>         
-                        <input type="email" id="inputEmail" class="form-control inputV" placeholder="Email address" required autofocus>
+                        <input type="email" name="j_username" id="inputEmail" class="form-control inputV" placeholder="Email address" required autofocus>
                     </div>
                     <span class="glyphicon form-control-feedback"></span>
                 </div>
@@ -20,7 +23,7 @@
                     <div class="input-group">
                         <label for="inputPassword" class="sr-only">Password</label>
                         <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>         
-                        <input type="text" id="inputPassword" class="form-control inputV " placeholder="Password" required>
+                        <input type="text" name="j_password" id="inputPassword" class="form-control inputV " placeholder="Password" required>
                     </div>
                     <span class="glyphicon form-control-feedback"></span>
                 </div>
