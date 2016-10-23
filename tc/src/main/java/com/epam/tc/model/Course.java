@@ -1,11 +1,12 @@
 package com.epam.tc.model;
 
+import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "courses")
-public class Course extends AbstractEntity {
+public class Course extends AbstractEntity implements Serializable {
 
     private String name;
 

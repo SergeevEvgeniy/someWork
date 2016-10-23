@@ -1,6 +1,5 @@
 package com.epam.tc.config;
 
-import com.epam.tc.dialect.HelloDialect;
 import com.epam.tc.service.UserDetailsServiceImpl;
 import java.util.Properties;
 import javax.sql.DataSource;
@@ -84,7 +83,6 @@ public class SpringWebConfig extends WebMvcConfigurerAdapter implements Applicat
         SpringTemplateEngine templateEngine = new SpringTemplateEngine();
         templateEngine.setEnableSpringELCompiler(true); // Compiled SpringEL should speed up executions
         templateEngine.setTemplateResolver(templateResolver());
-        templateEngine.addDialect(new HelloDialect());
         return templateEngine;
     }
 

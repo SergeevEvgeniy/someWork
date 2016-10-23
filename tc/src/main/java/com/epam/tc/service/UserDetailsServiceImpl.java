@@ -1,7 +1,6 @@
 package com.epam.tc.service;
 
 import com.epam.tc.model.User;
-import com.epam.tc.model.enums.UserRoleEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,12 +20,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userService.getUser("colibri");
+        User user = userService.getUser("admin@a");
         Set<GrantedAuthority> roles = new HashSet();
-        roles.add(new SimpleGrantedAuthority(UserRoleEnum.USER.name()));
+        roles.add(new SimpleGrantedAuthority(user.getUserRole()));
 
         UserDetails userDetails
-                = new org.springframework.security.core.userdetails.User(user.getLogin(),
+                = new org.springframework.security.core.userdetails.User(
+                        user.getLogin(),
                         user.getPassword(),
                         roles);
 

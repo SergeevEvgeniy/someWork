@@ -1,6 +1,8 @@
 package com.epam.tc.web.controller;
 
+import com.epam.tc.service.DefValueChecker;
 import java.io.IOException;
+import javax.annotation.PostConstruct;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,5 +24,10 @@ public class LoginController {
             HttpServletResponse resp) throws ServletException, IOException {
 
         resp.sendRedirect("/courses");
+    }
+
+    @PostConstruct
+    public void init() {
+        DefValueChecker dvChecker = new DefValueChecker();
     }
 }
