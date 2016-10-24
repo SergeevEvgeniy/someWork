@@ -1,5 +1,6 @@
 package com.epam.tc.config;
 
+import com.epam.tc.service.DefaultValuePopulator;
 import com.epam.tc.service.UserDetailsServiceImpl;
 import java.util.Properties;
 import javax.sql.DataSource;
@@ -33,13 +34,13 @@ import org.thymeleaf.templatemode.TemplateMode;
 @EnableWebMvc
 @EnableTransactionManagement
 @ComponentScan("com.epam.tc")
-public class SpringWebConfig extends WebMvcConfigurerAdapter implements ApplicationContextAware {
+public class SpringConfig extends WebMvcConfigurerAdapter implements ApplicationContextAware {
 
     public static final String CHARACTER_ENCODING = "UTF-8";
 
     private ApplicationContext applicationContext;
 
-    public SpringWebConfig() {
+    public SpringConfig() {
         super();
     }
 
@@ -129,17 +130,13 @@ public class SpringWebConfig extends WebMvcConfigurerAdapter implements Applicat
         entityManagerFactory.setJpaVendorAdapter(vendorAdapter);
 
         Properties additionalProperties = new Properties();
-        additionalProperties.put(
-                "hibernate.dialect",
+        additionalProperties.put("hibernate.dialect",
                 env.getProperty("hibernate.dialect"));
-        additionalProperties.put(
-                "hibernate.show_sql",
-                env.getProperty("hibernate.show_sql"));
-        additionalProperties.put(
-                "hibernate.hbm2ddl.auto",
+        additionalProperties.put("hibernate.show_sql",
+                true);
+        additionalProperties.put("hibernate.hbm2ddl.auto",
                 env.getProperty("hibernate.hbm2ddl.auto"));
         entityManagerFactory.setJpaProperties(additionalProperties);
-
         return entityManagerFactory;
     }
 
@@ -160,6 +157,11 @@ public class SpringWebConfig extends WebMvcConfigurerAdapter implements Applicat
     @Bean
     public UserDetailsService getUserDetailsService() {
         return new UserDetailsServiceImpl();
+    }
+
+    @Bean
+    public DefaultValuePopulator getDefaultValuePopulator() {
+        return new DefaultValuePopulator();
     }
 
     /* ******************************************************************* */

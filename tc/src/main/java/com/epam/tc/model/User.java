@@ -1,21 +1,30 @@
 package com.epam.tc.model;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "users")
-public class User extends AbstractEntity implements Serializable {
+public class User implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "UserId")
+    private int id;
+
+    private String email;
     private String login;
     private String password;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Role")
+    @ManyToOne
+    @JoinColumn(name = "RoleId")
     private UserRole userRole;
 
     public void setUserRole(String userRole) {
@@ -26,7 +35,8 @@ public class User extends AbstractEntity implements Serializable {
         return userRole.getRole();
     }
 
-    public User(String login, String password, UserRole userRole) {
+    public User(String email, String login, String password, UserRole userRole) {
+        this.email = email;
         this.login = login;
         this.password = password;
         this.userRole = userRole;
@@ -49,5 +59,21 @@ public class User extends AbstractEntity implements Serializable {
 
     public String getLogin() {
         return login;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

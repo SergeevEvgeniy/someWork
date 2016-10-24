@@ -16,7 +16,7 @@ public class SpringServletInitializer extends AbstractDispatcherServletInitializ
     @Override
     protected WebApplicationContext createServletApplicationContext() {
         final AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
-        context.register(SpringWebConfig.class);
+        context.register(SpringConfig.class);
         return context;
     }
 
@@ -33,7 +33,7 @@ public class SpringServletInitializer extends AbstractDispatcherServletInitializ
     @Override
     protected Filter[] getServletFilters() {
         final CharacterEncodingFilter encodingFilter = new CharacterEncodingFilter();
-        encodingFilter.setEncoding(SpringWebConfig.CHARACTER_ENCODING);
+        encodingFilter.setEncoding(SpringConfig.CHARACTER_ENCODING);
         encodingFilter.setForceEncoding(true);
         return new Filter[]{encodingFilter};
     }

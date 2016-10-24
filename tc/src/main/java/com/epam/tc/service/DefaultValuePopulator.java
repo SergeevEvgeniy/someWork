@@ -4,21 +4,17 @@ import com.epam.tc.model.Course;
 import com.epam.tc.service.course.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-/**
- *
- * @author Женя
- */
-public class DefValueChecker {
+public class DefaultValuePopulator {
 
-  //  @Autowired
+    @Autowired
     private CourseService courseService;
 
     private Course course;
 
-    public DefValueChecker() {
-//        if (courseService.getAll().isEmpty()) {
-//            SetDefCourses();
-//        }
+    public void CheckValue() {
+        if (courseService.getAll().isEmpty()) {
+            SetDefCourses();
+        }
     }
 
     private void SetDefCourses() {
