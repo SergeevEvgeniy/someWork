@@ -6,7 +6,7 @@ import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CRUDdaoImpl<EntityType> implements CRUDdao<EntityType> {
+public abstract class CRUDdaoImpl<EntityType> implements CRUDdao<EntityType> {
 
     @PersistenceContext
     private EntityManager entityManager;
