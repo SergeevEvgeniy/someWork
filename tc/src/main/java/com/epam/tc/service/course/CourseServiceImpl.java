@@ -4,7 +4,7 @@ import com.epam.tc.model.Course;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.epam.tc.dao.CourseDao;
+import com.epam.tc.dao.course.CourseDao;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -26,7 +26,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Course getById(int id) {
-        return courseDao.getById(id);
+        return (Course) courseDao.getById(id);
     }
 
     @Override

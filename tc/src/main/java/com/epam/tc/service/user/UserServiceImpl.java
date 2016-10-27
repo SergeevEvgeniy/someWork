@@ -1,4 +1,4 @@
-package com.epam.tc.service;
+package com.epam.tc.service.user;
 
 import com.epam.tc.model.User;
 import org.springframework.stereotype.Service;

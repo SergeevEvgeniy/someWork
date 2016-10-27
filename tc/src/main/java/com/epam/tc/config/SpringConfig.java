@@ -1,7 +1,7 @@
 package com.epam.tc.config;
 
 import com.epam.tc.service.DefaultValuePopulator;
-import com.epam.tc.service.UserDetailsServiceImpl;
+import com.epam.tc.service.user.UserDetailsServiceImpl;
 import java.util.Properties;
 import javax.sql.DataSource;
 import org.springframework.beans.BeansException;

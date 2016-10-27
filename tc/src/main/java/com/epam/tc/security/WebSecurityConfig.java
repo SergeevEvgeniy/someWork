@@ -1,6 +1,6 @@
 package com.epam.tc.security;
 
-import com.epam.tc.service.UserDetailsServiceImpl;
+import com.epam.tc.service.user.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
