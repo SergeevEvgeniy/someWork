@@ -34,13 +34,13 @@ import org.thymeleaf.templatemode.TemplateMode;
 @EnableWebMvc
 @EnableTransactionManagement
 @ComponentScan("com.epam.tc")
-public class SpringConfig extends WebMvcConfigurerAdapter implements ApplicationContextAware {
+public class BeanConfig extends WebMvcConfigurerAdapter implements ApplicationContextAware {
 
     public static final String CHARACTER_ENCODING = "UTF-8";
 
     private ApplicationContext applicationContext;
 
-    public SpringConfig() {
+    public BeanConfig() {
         super();
     }
 
@@ -179,5 +179,5 @@ public class SpringConfig extends WebMvcConfigurerAdapter implements Application
         registry.addResourceHandler("/images/**").addResourceLocations("/images/");
         registry.addResourceHandler("/css/**").addResourceLocations("/css/");
         registry.addResourceHandler("/js/**").addResourceLocations("/js/");
-    }
+   }
 }

@@ -26,7 +26,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Course getById(int id) {
-        return (Course) courseDao.getById(id);
+        return courseDao.getById(id);
     }
 
     @Override

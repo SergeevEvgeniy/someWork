@@ -4,5 +4,5 @@ import com.epam.tc.model.User;
 
 public interface UserService {
 
-    User getUser(String login);
+    User getUserByEmail(String login);
 }
