@@ -15,5 +15,4 @@ public interface CourseService {
 
     void update(Course course);
 
-    void SetupDefCourses();
 }

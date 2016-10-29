@@ -9,15 +9,16 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "courses")
-public class Course implements Serializable {
+@Table(name = "userRoles")
+public class UserRole implements Serializable {
+
+    private String userRole;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "CourseId")
+    @Column(name = "RoleId")
     private int id;
-    private String name;
-
+    
     public int getId() {
         return id;
     }
@@ -26,18 +27,18 @@ public class Course implements Serializable {
         this.id = id;
     }
 
-    public Course() {
+    public UserRole() {
     }
 
-    public Course(String name) {
-        this.name = name;
+    public UserRole(String userRole) {
+        this.userRole = userRole;
     }
 
-    public String getName() {
-        return name;
+    public String getRole() {
+        return userRole;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setRole(String userRole) {
+        this.userRole = userRole;
     }
 }
