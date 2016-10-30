@@ -1,23 +1,36 @@
 package com.epam.tc.service;
 
 import com.epam.tc.model.Course;
+import com.epam.tc.model.User;
+import com.epam.tc.model.UserRole;
 import com.epam.tc.service.course.CourseService;
+import com.epam.tc.service.user.UserService;
+import com.epam.tc.service.userRole.UserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class DefaultValuePopulator {
 
     @Autowired
     private CourseService courseService;
-
-    private Course course;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private UserRoleService userRoleService;
 
     public void CheckValue() {
         if (courseService.getAll().isEmpty()) {
             SetDefCourses();
         }
+        if (userRoleService.getAll().isEmpty()) {
+            setDefUserRoles();
+        }
+        if (userService.getAll().isEmpty()) {
+            SetDefUsers();
+        }
     }
 
     private void SetDefCourses() {
+        Course course;
         course = new Course("Draft");
         courseService.create(course);
         course = new Course("Proposal");
@@ -35,4 +48,50 @@ public class DefaultValuePopulator {
         course = new Course("Finished");
         courseService.create(course);
     }
+
+    private void setDefUserRoles() {
+        UserRole userRole;
+        userRole = new UserRole("Knowledge Manager");
+        userRoleService.create(userRole);
+        userRole = new UserRole("Department Manager");
+        userRoleService.create(userRole);
+        userRole = new UserRole("Lector");
+        userRoleService.create(userRole);
+        userRole = new UserRole("User");
+        userRoleService.create(userRole);
+    }
+
+    private void SetDefUsers() {
+        User user;
+        UserRole ur;
+        ur = userRoleService.getURbyName("Knowledge Manager");
+        user = new User("km@tc.edu", "km", "123", ur);
+        //user.setUserRole("Knowledge Manager");
+        userService.create(user);
+        /*
+        user = new User("dm@tc.edu", "dm", "123");
+        user.setUserRole("Department Manager");
+        userService.create(user);
+
+        user = new User("lecture-a@tc.edu", "lecture-a", "123");
+        user.setUserRole("Lector");
+        userService.create(user);
+
+        user = new User("lecture-b@tc.edu", "lecture-b", "123");
+        user.setUserRole("Lector");
+        userService.create(user);
+
+        user = new User("user-a@tc.edu", "user-a", "123");
+        user.setUserRole("User");
+        userService.create(user);
+
+        user = new User("user-b@tc.edu", "user-b", "123");
+        user.setUserRole("User");
+        userService.create(user);
+
+        user = new User("user-c@tc.edu", "user-c", "123");
+        user.setUserRole("User");
+        userService.create(user);*/
+    }
+
 }
