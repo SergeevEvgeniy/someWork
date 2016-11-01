@@ -7,7 +7,17 @@
     <body>
         <div class="container">
             <header>
-                <h1>Courses</h1>
+                <h1>
+                    Courses
+                    <div class="logout">
+                        <span id="currentUserLogin">
+                            <th th:text="${user}">User </th>
+                        </span>
+                        <a href="/logout.html">
+                            <i class="glyphicon glyphicon-off"></i>
+                        </a>
+                    </div>
+                </h1>
             </header>
             <table class="table table-striped table-bordered">
                 <thead>
