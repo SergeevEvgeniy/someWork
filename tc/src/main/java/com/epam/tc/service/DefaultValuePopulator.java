@@ -17,19 +17,19 @@ public class DefaultValuePopulator {
     @Autowired
     private UserRoleService userRoleService;
 
-    public void CheckValue() {
+    public void initDBvaluesIsEmpty() {
         if (courseService.getAll().isEmpty()) {
-            SetDefCourses();
+            setDefaultCourses();
         }
         if (userRoleService.getAll().isEmpty()) {
-            setDefUserRoles();
+            setDefaultUserRoles();
         }
         if (userService.getAll().isEmpty()) {
-            SetDefUsers();
+            SetDefaultUsers();
         }
     }
 
-    private void SetDefCourses() {
+    private void setDefaultCourses() {
         Course course;
 
         course = new Course("Draft");
@@ -57,7 +57,7 @@ public class DefaultValuePopulator {
         courseService.create(course);
     }
 
-    private void setDefUserRoles() {
+    private void setDefaultUserRoles() {
         UserRole userRole;
 
         userRole = new UserRole("Knowledge Manager");
@@ -73,7 +73,7 @@ public class DefaultValuePopulator {
         userRoleService.create(userRole);
     }
 
-    private void SetDefUsers() {
+    private void SetDefaultUsers() {
         User user;
 
         user = new User("km@tc.edu", "km", "123", userRoleService.getURbyName("Knowledge Manager"));

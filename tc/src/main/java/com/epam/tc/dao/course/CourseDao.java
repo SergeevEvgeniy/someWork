@@ -5,5 +5,5 @@ import com.epam.tc.model.Course;
 
 public interface CourseDao extends CRUDdao<Course> {
 
-    public Course getByTopic(String name);
+    public Course getByName(String name);
 }

@@ -7,7 +7,7 @@ public interface UserService {
 
     List<User> getAll();
 
-    User getUserByEmail(String login);
+    User getUserByEmail(String email);
     
     void create(User user);
 }

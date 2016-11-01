@@ -21,13 +21,14 @@ public class CourseDaoImpl extends CRUDdaoImpl<Course> implements CourseDao {
         super(Course.class);
     }
 
-    public Course getByTopic(String name) {
+    @Override
+    public Course getByName(String name) {  
         try {
             return entityManager.createQuery("select c from Course c where c.name = :name", Course.class)
                     .setParameter("name", name)
                     .getSingleResult();
         } catch (NoResultException e) {
-            LOG.info("Course with topic {0} not found", name);
+            LOG.info("Course with name {0} not found", name);
             LOG.debug("No course found ", e);
             return null;
         }
