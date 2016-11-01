@@ -1,13 +1,23 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
-        <script th:replace="dependenciesBootstrap"></script>
+        <script th:replace="headerLinks"></script>
         <title>Courses page </title>
     </head>
     <body>
         <div class="container">
             <header>
-                <h1>Courses</h1>
+                <h1>
+                    Courses
+                    <div class="logout">
+                        <span id="currentUserLogin">
+                            <th th:text="${user}">User </th>
+                        </span>
+                        <a href="/logout.html">
+                            <i class="glyphicon glyphicon-off"></i>
+                        </a>
+                    </div>
+                </h1>
             </header>
             <table class="table table-striped table-bordered">
                 <thead>
@@ -17,13 +27,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Project Management 101</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>NET Technology</td>
+                    <tr th:each="course: ${courses}">
+                        <td th:text="${course.id}">Id</td>
+                        <td th:text="${course.name}">Course</td>
                     </tr>
                 </tbody>
             </table>

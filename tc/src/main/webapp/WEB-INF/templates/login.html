@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8"/>
+        <script th:replace="headerLinks"></script>
+    </head>
+    <body>
+        <div class="container">
+            <form class="form-signin" role="form" th:action="@{/login}" method="post"  data-toggle="validator">
+                <h2 class="form-signin-heading">Please sign in</h2>
+                <div class="form-group has-feedback">
+                    <div class="input-group">
+                        <label for="inputEmail" class="sr-only">Email address</label>
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>         
+                        <input type="email" name="j_username" id="inputEmail" class="form-control inputV" placeholder="Email address" required autofocus>
+                    </div>
+                    <span class="glyphicon form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback">
+                    <div class="input-group">
+                        <label for="inputPassword" class="sr-only">Password</label>
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>         
+                        <input type="text" name="j_password" id="inputPassword" class="form-control inputV " placeholder="Password" required>
+                    </div>
+                    <span class="glyphicon form-control-feedback"></span>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" value="remember-me"> Remember me
+                    </label>
+                </div>
+                <button class="btn btn-lg btn-primary btn-block " type="submit" id="validate">Sign in</button>
+            </form>
+        </div>
+
+        <script type="text/javascript" src="loginValidator.js" ></script>
+
+    </body>
+</html> 
