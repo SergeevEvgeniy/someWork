@@ -35,6 +35,12 @@ public class Course implements Serializable {
         this.name = name;
     }
 
+    public Course(String name, String description, String links) {
+        this.name = name;
+        this.description = description;
+        this.links = links;
+    }
+
     public String getName() {
         return name;
     }
@@ -57,5 +63,5 @@ public class Course implements Serializable {
 
     public void setLinks(String links) {
         this.links = links;
-    }    
+    }
 }
