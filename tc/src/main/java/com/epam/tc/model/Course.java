@@ -17,6 +17,8 @@ public class Course implements Serializable {
     @Column(name = "CourseId")
     private int id;
     private String name;
+    private String description;
+    private String links;
 
     public int getId() {
         return id;
@@ -40,4 +42,20 @@ public class Course implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getLinks() {
+        return links;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setLinks(String links) {
+        this.links = links;
+    }    
 }

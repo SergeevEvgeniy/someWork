@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <script th:replace="headerLinks"></script>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>
+                    Course Details
+                    <script th:replace="logoutHeader"></script>
+                </h1>
+            </header>
+            <div class="form-horizontal">
+                <div class="control-group">
+                    <td th:text="${course.name}">Name </td>
+                </div>
+                <div class="control-group">
+                    <td th:text="${course.description}">Description </td>
+                </div>
+                <div class="control-group">
+                    <td th:text="${course.links}">Links </td>
+                </div>
+                <div class="form-actions">
+                    <a class="btn" href="courses">Back</a>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
