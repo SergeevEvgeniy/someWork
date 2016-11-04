@@ -61,7 +61,6 @@ public class CoursesController {
             if (ifCourseExist(id)) {
                 mav = new ModelAndView("courseDetails");
                 mav.addObject("course", courseService.getById(Integer.parseInt(id)));
-                mav.addObject("user", authenticatedUser.getUserName());
             } else {
                 LOG.warn("Not found courses with id=", id);
                 mav = new ModelAndView("troublePage");
@@ -70,13 +69,13 @@ public class CoursesController {
             LOG.warn("Bad id=", id);
             mav = new ModelAndView("troublePage");
         }
-        return mav;
+        return mav.addObject("user", authenticatedUser.getUserName());
     }
 
     @Secured("Lector")
     @RequestMapping(value = "/courses/create", method = RequestMethod.GET)
     public ModelAndView createCourse() {
-        return new ModelAndView("create");
+        return new ModelAndView("create").addObject("user", authenticatedUser.getUserName());
     }
 
     @Secured("Lector")
@@ -100,11 +99,10 @@ public class CoursesController {
         if (ifCourseExist(id)) {
             mav = new ModelAndView("update");
             mav.addObject("course", courseService.getById(Integer.parseInt(id)));
-            mav.addObject("user", authenticatedUser.getUserName());
         } else {
             mav = new ModelAndView("troublePage");
         }
-        return mav;
+        return mav.addObject("user", authenticatedUser.getUserName());
     }
 
     @RequestMapping(value = "/courses/{courseId}/update", method = RequestMethod.POST)

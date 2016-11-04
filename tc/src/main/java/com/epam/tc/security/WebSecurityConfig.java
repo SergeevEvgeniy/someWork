@@ -29,7 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/courses/create").hasAuthority("Lector")
+                .antMatchers("/courses/create").hasAnyAuthority("Lector", "User")
                 .antMatchers("/login").permitAll()
                 .anyRequest().authenticated()
                 .and()
