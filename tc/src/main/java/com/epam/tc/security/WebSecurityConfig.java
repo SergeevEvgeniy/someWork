@@ -16,7 +16,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
-    
+
     @Autowired
     private AuthenticationSuccessHandlerImpl successHandler;
 
@@ -29,7 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/courses/create").hasRole("Lector")
+                .antMatchers("/courses/create").hasAuthority("Lector")
                 .antMatchers("/login").permitAll()
                 .anyRequest().authenticated()
                 .and()

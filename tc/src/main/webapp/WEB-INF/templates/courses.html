@@ -12,7 +12,7 @@
                     <script th:replace="logoutHeader"></script>
                 </h1>
             </header>
-            <div class="courses-top-control" sec:authorize="hasRole('Lector')">
+            <div class="courses-top-control" sec:authorize="hasAuthority('Lector')">
                 <a id="createCourseButton" class="btn btn-primary" href="/courses/create">Create</a>
             </div>
             <table class="table table-striped table-bordered">

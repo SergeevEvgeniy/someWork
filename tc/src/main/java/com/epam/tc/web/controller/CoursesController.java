@@ -5,12 +5,14 @@ import com.epam.tc.security.AuthenticatedUser;
 import com.epam.tc.service.course.CourseService;
 import com.epam.tc.web.forms.CourseForm;
 import java.io.IOException;
+import java.util.Collection;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -34,6 +36,10 @@ public class CoursesController {
     public Model courses(Model model) {
         model.addAttribute("user", authenticatedUser.getUserName());
         model.addAttribute("courses", courseService.getAll());
+        Collection<? extends GrantedAuthority> gr = authenticatedUser.getUserRole();
+        for (int i = 0; i < gr.size(); i++) {
+            System.out.println(gr.toString());
+        }
         return model;
     }
 

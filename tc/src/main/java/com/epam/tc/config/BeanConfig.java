@@ -2,7 +2,9 @@ package com.epam.tc.config;
 
 import com.epam.tc.service.DefaultValuePopulator;
 import com.epam.tc.service.user.UserDetailsServiceImpl;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 import javax.sql.DataSource;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.thymeleaf.dialect.IDialect;
 import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
@@ -83,9 +86,20 @@ public class BeanConfig extends WebMvcConfigurerAdapter implements ApplicationCo
     @Bean
     public SpringTemplateEngine templateEngine() {
         SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+        
+        Set<IDialect> dialects = new HashSet<>();
+        dialects.add(springSecurityDialect());
+        
+        templateEngine.setAdditionalDialects(dialects);
         templateEngine.setEnableSpringELCompiler(true); // Compiled SpringEL should speed up executions
         templateEngine.setTemplateResolver(templateResolver());
         return templateEngine;
+    }
+
+    @Bean
+    public SpringSecurityDialect springSecurityDialect() {
+        SpringSecurityDialect dialect = new SpringSecurityDialect();
+        return dialect;
     }
 
     @Bean
