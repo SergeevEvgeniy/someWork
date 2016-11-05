@@ -31,6 +31,6 @@ public class ErrorPageController implements ErrorController {
 
     @RequestMapping(value = "/403", method = RequestMethod.GET)
     public Model accessDenied(Model model) {
-        return model.addAttribute("user", authenticatedUser.getUserName());
+        return model.addAttribute("user", authenticatedUser.getUserEmail());
     }
 }

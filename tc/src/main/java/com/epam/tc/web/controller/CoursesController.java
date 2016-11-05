@@ -3,6 +3,7 @@ package com.epam.tc.web.controller;
 import com.epam.tc.model.Course;
 import com.epam.tc.security.AuthenticatedUser;
 import com.epam.tc.service.course.CourseService;
+import com.epam.tc.service.user.UserService;
 import com.epam.tc.web.forms.CourseForm;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
@@ -26,13 +27,15 @@ public class CoursesController {
     private CourseService courseService;
     @Autowired
     private AuthenticatedUser authenticatedUser;
+    @Autowired
+    private UserService userService;
 
     private static final Logger LOG = LoggerFactory.getLogger(CoursesController.class);
     private static final String ID = "id";
 
     @RequestMapping(value = {"/courses", "/*"}, method = RequestMethod.GET)
     public Model courses(Model model) {
-        model.addAttribute("user", authenticatedUser.getUserName());
+        model.addAttribute("user", authenticatedUser.getUserEmail());
         model.addAttribute("courses", courseService.getAll());
         return model;
     }
@@ -62,12 +65,12 @@ public class CoursesController {
             LOG.warn("Bad id=", id);
             mav = new ModelAndView("troublePage");
         }
-        return mav.addObject("user", authenticatedUser.getUserName());
+        return mav.addObject("user", authenticatedUser.getUserEmail());
     }
 
     @RequestMapping(value = "/courses/create", method = RequestMethod.GET)
     public ModelAndView createCourse() {
-        return new ModelAndView("create").addObject("user", authenticatedUser.getUserName());
+        return new ModelAndView("create").addObject("user", authenticatedUser.getUserEmail());
     }
 
     @RequestMapping(value = "/courses/create", method = RequestMethod.POST)
@@ -77,9 +80,9 @@ public class CoursesController {
         Course course = new Course(
                 req.getParameter("titleField"),
                 req.getParameter("descriptionField"),
-                req.getParameter("linksField"));
+                req.getParameter("linksField"),
+                userService.getUserByEmail(authenticatedUser.getUserEmail()));
         courseService.create(course);
-
         resp.sendRedirect("/courses");
     }
 
@@ -93,7 +96,7 @@ public class CoursesController {
         } else {
             mav = new ModelAndView("troublePage");
         }
-        return mav.addObject("user", authenticatedUser.getUserName());
+        return mav.addObject("user", authenticatedUser.getUserEmail());
     }
 
     @RequestMapping(value = "/courses/{courseId}/update", method = RequestMethod.POST)

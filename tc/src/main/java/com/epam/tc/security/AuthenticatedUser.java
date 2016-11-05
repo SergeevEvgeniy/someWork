@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthenticatedUser {
 
-    public String getUserName() {
+    public String getUserEmail() {
         UserDetails ud = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return ud.getUsername();
     }

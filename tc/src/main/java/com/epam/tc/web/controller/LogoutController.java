@@ -20,7 +20,7 @@ public class LogoutController {
     
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public Model login(Model model) {
-        return model.addAttribute("user", authenticatedUser.getUserName());
+        return model.addAttribute("user", authenticatedUser.getUserEmail());
     }
     
     @RequestMapping(value = "/logout_action", method = RequestMethod.GET)
