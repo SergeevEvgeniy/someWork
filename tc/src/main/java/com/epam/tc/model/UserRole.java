@@ -7,10 +7,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import org.springframework.security.core.GrantedAuthority;
 
 @Entity
 @Table(name = "userRoles")
-public class UserRole implements Serializable {
+public class UserRole implements Serializable, GrantedAuthority {
 
     private String userRole;
 
@@ -18,7 +19,7 @@ public class UserRole implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "RoleId")
     private int id;
-    
+
     public int getId() {
         return id;
     }
@@ -40,5 +41,10 @@ public class UserRole implements Serializable {
 
     public void setRole(String userRole) {
         this.userRole = userRole;
+    }
+
+    @Override
+    public String getAuthority() {
+        return this.getRole();
     }
 }

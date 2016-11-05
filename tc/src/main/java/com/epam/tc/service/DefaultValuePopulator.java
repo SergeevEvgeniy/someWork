@@ -82,10 +82,10 @@ public class DefaultValuePopulator {
         user = new User("dm@tc.edu", "dm", "123", userRoleService.getURbyName("Department Manager"));
         userService.create(user);
 
-        user = new User("lecture-a@tc.edu", "lecture-a", "123", userRoleService.getURbyName("Lector"));
+        user = new User("lecturer-a@tc.edu", "lecturer-a", "123", userRoleService.getURbyName("Lector"));
         userService.create(user);
 
-        user = new User("lecture-b@tc.edu", "lecture-b", "123", userRoleService.getURbyName("Lector"));
+        user = new User("lecturer-b@tc.edu", "lecturer-b", "123", userRoleService.getURbyName("Lector"));
         userService.create(user);
 
         user = new User("user-a@tc.edu", "user-a", "123", userRoleService.getURbyName("User"));
