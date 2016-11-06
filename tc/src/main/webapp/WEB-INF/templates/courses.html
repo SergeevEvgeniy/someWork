@@ -28,7 +28,7 @@
                         <td>
                             <a th:href="@{/courses/} + ${course.id}" th:text="${course.name}">Course </a>
                         </td>
-                        <td>
+                        <td sec:authorize="hasAuthority('Lector')">
                             <a class="btn btn-mini" th:href="@{/courses/} + ${course.id}+ @{/update}">Update</a>
                         </td>
                     </tr>

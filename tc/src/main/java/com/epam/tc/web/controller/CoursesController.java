@@ -1,6 +1,7 @@
 package com.epam.tc.web.controller;
 
 import com.epam.tc.model.Course;
+import com.epam.tc.model.User;
 import com.epam.tc.security.AuthenticatedUser;
 import com.epam.tc.service.course.CourseService;
 import com.epam.tc.service.user.UserService;
@@ -88,13 +89,19 @@ public class CoursesController {
 
     @RequestMapping(value = "/courses/{id}/update", method = RequestMethod.GET)
     public ModelAndView printForUpdateCourse(@PathVariable(ID) String id) {
-        ModelAndView mav;
+        ModelAndView mav = new ModelAndView("troublePage");
 
         if (ifCourseExist(id)) {
-            mav = new ModelAndView("update");
-            mav.addObject("course", courseService.getById(Integer.parseInt(id)));
-        } else {
-            mav = new ModelAndView("troublePage");
+            int id_int = Integer.parseInt(id);
+            try {
+                Course course = courseService.getById(id_int);
+                if (authenticatedUser.getUserEmail().equals(course.getOwner().getEmail())) {
+                    mav = new ModelAndView("update");
+                    mav.addObject("course", courseService.getById(Integer.parseInt(id)));
+                }
+            } catch (NullPointerException ex) {
+                LOG.warn("This course {0} haven't owner", id_int);
+            }
         }
         return mav.addObject("user", authenticatedUser.getUserEmail());
     }
