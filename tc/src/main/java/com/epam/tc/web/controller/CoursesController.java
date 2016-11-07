@@ -23,24 +23,24 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class CoursesController {
-
+    
     @Autowired
     private CourseService courseService;
     @Autowired
     private AuthenticatedUser authenticatedUser;
     @Autowired
     private UserService userService;
-
+    
     private static final Logger LOG = LoggerFactory.getLogger(CoursesController.class);
     private static final String ID = "id";
-
+    
     @RequestMapping(value = {"/courses", "/*"}, method = RequestMethod.GET)
     public Model courses(Model model) {
         model.addAttribute("user", authenticatedUser.getUserEmail());
         model.addAttribute("courses", courseService.getAll());
         return model;
     }
-
+    
     private boolean ifCourseExist(String id) {
         int id_int = Integer.parseInt(id);
         final Course course = courseService.getById(id_int);
@@ -50,7 +50,7 @@ public class CoursesController {
             return true;
         }
     }
-
+    
     @RequestMapping(value = {"/courses/{id}"}, method = RequestMethod.GET)
     public ModelAndView details(@PathVariable(ID) String id) {
         ModelAndView mav;
@@ -58,6 +58,11 @@ public class CoursesController {
             if (ifCourseExist(id)) {
                 mav = new ModelAndView("courseDetails");
                 mav.addObject("course", courseService.getById(Integer.parseInt(id)));
+                try {
+                    mav.addObject("email", courseService.getById(Integer.parseInt(id)).getOwner().getEmail());
+                } catch (NullPointerException ex) {
+                    LOG.warn("Course {0} without owner", id);
+                }
             } else {
                 LOG.warn("Not found courses with id=", id);
                 mav = new ModelAndView("troublePage");
@@ -68,16 +73,16 @@ public class CoursesController {
         }
         return mav.addObject("user", authenticatedUser.getUserEmail());
     }
-
+    
     @RequestMapping(value = "/courses/create", method = RequestMethod.GET)
     public ModelAndView createCourse() {
         return new ModelAndView("create").addObject("user", authenticatedUser.getUserEmail());
     }
-
+    
     @RequestMapping(value = "/courses/create", method = RequestMethod.POST)
     public void createCourse(final HttpServletRequest req,
             final HttpServletResponse resp) throws IOException {
-
+        
         Course course = new Course(
                 req.getParameter("titleField"),
                 req.getParameter("descriptionField"),
@@ -86,11 +91,11 @@ public class CoursesController {
         courseService.create(course);
         resp.sendRedirect("/courses");
     }
-
+    
     @RequestMapping(value = "/courses/{id}/update", method = RequestMethod.GET)
     public ModelAndView printForUpdateCourse(@PathVariable(ID) String id) {
         ModelAndView mav = new ModelAndView("troublePage");
-
+        
         if (ifCourseExist(id)) {
             int id_int = Integer.parseInt(id);
             try {
@@ -105,18 +110,46 @@ public class CoursesController {
         }
         return mav.addObject("user", authenticatedUser.getUserEmail());
     }
-
+    
     @RequestMapping(value = "/courses/{courseId}/update", method = RequestMethod.POST)
     public void updateCourse(final HttpServletResponse resp,
             @ModelAttribute CourseForm courseForm) throws IOException {
-
+        
         if (ifCourseExist(courseForm.getCourseId())) {
             Course course = courseService.getById(Integer.parseInt(courseForm.getCourseId()));
             course.setName(courseForm.getName());
             course.setDescription(courseForm.getDescription());
             course.setLinks(courseForm.getLinks());
             courseService.update(course);
-
+            
+            resp.sendRedirect("/courses");
+        } else {
+            resp.sendRedirect("/troublePage");
+        }
+    }
+    
+    @RequestMapping(value = "/courses/{id}/subscribe", method = RequestMethod.GET)
+    public ModelAndView printForSubscribeCourse(@PathVariable(ID) String id) {
+        ModelAndView mav = new ModelAndView("troublePage");
+        
+        if (ifCourseExist(id)) {
+            mav = new ModelAndView("subscribe");
+            mav.addObject("course", courseService.getById(Integer.parseInt(id)));
+        }
+        return mav.addObject("user", authenticatedUser.getUserEmail());
+    }
+    
+    @RequestMapping(value = "/courses/{courseId}/subscribe", method = RequestMethod.POST)
+    public void subscribeCourse(final HttpServletResponse resp,
+            @ModelAttribute CourseForm courseForm) throws IOException {
+        
+        if (ifCourseExist(courseForm.getCourseId())) {
+            Course course = courseService.getById(Integer.parseInt(courseForm.getCourseId()));
+            course.setName(courseForm.getName());
+            course.setDescription(courseForm.getDescription());
+            course.setLinks(courseForm.getLinks());
+            courseService.update(course);
+            
             resp.sendRedirect("/courses");
         } else {
             resp.sendRedirect("/troublePage");
