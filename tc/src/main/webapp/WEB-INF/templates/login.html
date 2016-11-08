@@ -1,39 +1,34 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html>
     <head>
-        <meta charset="utf-8"/>
+        <title>Login page</title>
+        <meta charset="UTF-8">
         <script th:replace="headerLinks"></script>
     </head>
     <body>
         <div class="container">
-            <form class="form-signin" role="form" th:action="@{/login}" method="post"  data-toggle="validator">
-                <h2 class="form-signin-heading">Please sign in</h2>
-                <div class="form-group has-feedback">
-                    <div class="input-group">
-                        <label for="inputEmail" class="sr-only">Email address</label>
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>         
-                        <input type="email" name="j_username" id="inputEmail" class="form-control inputV" placeholder="Email address" required autofocus>
+            <form class="form-horizontal" th:action="@{/login}" method="post">
+                <fieldset>
+                    <div class="control-group">
+                        <label class="control-label">Login</label>
+                        <div class="controls">
+                            <div class="input-prepend">
+                                <span class="add-on">@</span>
+                                <input id="loginField" class="span3" name="j_username" type="email" required autofocus/>
+                            </div>
+                        </div>
                     </div>
-                    <span class="glyphicon form-control-feedback"></span>
-                </div>
-                <div class="form-group has-feedback">
-                    <div class="input-group">
-                        <label for="inputPassword" class="sr-only">Password</label>
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>         
-                        <input type="text" name="j_password" id="inputPassword" class="form-control inputV " placeholder="Password" required>
+                    <div class="control-group">
+                        <label class="control-label">Password</label>
+                        <div class="controls">
+                            <input id="passwordField" class="span3" type="password" name="j_password" required=""/>
+                        </div>
                     </div>
-                    <span class="glyphicon form-control-feedback"></span>
-                </div>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" value="remember-me"> Remember me
-                    </label>
-                </div>
-                <button class="btn btn-lg btn-primary btn-block " type="submit" id="validate">Sign in</button>
+                    <div class="form-actions">
+                        <button id="loginButton" class="btn btn-primary" type="submit">Login</button>
+                    </div>
+                </fieldset> 
             </form>
         </div>
-
-        <script type="text/javascript" src="loginValidator.js" ></script>
-
     </body>
-</html> 
+</html>
