@@ -58,6 +58,11 @@ public class CoursesController {
             if (ifCourseExist(id)) {
                 mav = new ModelAndView("courseDetails");
                 mav.addObject("course", courseService.getById(Integer.parseInt(id)));
+                try {
+                    mav.addObject("e,ail", courseService.getById(Integer.parseInt(id)).getOwner().getEmail());
+                } catch (NullPointerException ex) {
+                    LOG.warn("Course without owner");
+                }
             } else {
                 LOG.warn("Not found courses with id=", id);
                 mav = new ModelAndView("troublePage");
@@ -121,5 +126,16 @@ public class CoursesController {
         } else {
             resp.sendRedirect("/troublePage");
         }
+    }
+
+    @RequestMapping(value = "/courses/{id}/subscribe", method = RequestMethod.GET)
+    public ModelAndView printForSubscribeCourse(@PathVariable(ID) String id) {
+        ModelAndView mav = new ModelAndView("troublePage");
+
+        if (ifCourseExist(id)) {
+            mav = new ModelAndView("subscribe");
+            mav.addObject("course", courseService.getById(Integer.parseInt(id)));
+        }
+        return mav.addObject("user", authenticatedUser.getUserEmail());
     }
 }
