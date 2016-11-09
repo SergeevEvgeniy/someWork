@@ -93,17 +93,16 @@ public class CoursesController {
     @RequestMapping(value = "/courses/{id}/update", method = RequestMethod.GET)
     public ModelAndView printForUpdateCourse(@PathVariable(ID) String id) {
         ModelAndView mav = new ModelAndView("troublePage");
-
         if (ifCourseExist(id)) {
-            int id_int = Integer.parseInt(id);
             try {
-                Course course = courseService.getById(id_int);
-                if (authenticatedUser.getUserEmail().equals(course.getOwner().getEmail())) {
+                Course course = courseService.getById(Integer.parseInt(id));
+                String ownerEmail = course.getOwner().getEmail();
+                if (ownerEmail.equals(authenticatedUser.getUserEmail())) {
                     mav = new ModelAndView("update");
-                    mav.addObject("course", courseService.getById(Integer.parseInt(id)));
+                    mav.addObject("course", course);
                 }
             } catch (NullPointerException ex) {
-                LOG.warn("This course {0} haven't owner", id_int);
+                LOG.warn("This course {0} without owner", id);
             }
         }
         return mav.addObject("user", authenticatedUser.getUserEmail());
@@ -132,8 +131,16 @@ public class CoursesController {
 
         if (ifCourseExist(id)) {
             mav = new ModelAndView("subscribe");
-            mav.addObject("course", courseService.getById(Integer.parseInt(id)));
+            Course course = courseService.getById(Integer.parseInt(id));
+            mav.addObject("course", course);
+
+            try {
+                String ownerEmail = course.getOwner().getEmail();
+                mav.addObject("owner", ownerEmail);
+            } catch (NullPointerException ex) {
+                LOG.warn("This course {0} without owner", id);
+            }
         }
-        return mav.addObject("owner", authenticatedUser.getUserEmail());
+        return mav.addObject("user", authenticatedUser.getUserEmail());
     }
 }
