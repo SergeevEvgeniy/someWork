@@ -127,10 +127,27 @@ public class CoursesController {
 
     @RequestMapping(value = "/courses/{id}/subscribe", method = RequestMethod.GET)
     public ModelAndView printForSubscribeCourse(@PathVariable(ID) String id) {
+        if (!"".equals(authenticatedUser.getUserEmail())) {
+            return AddCourseAndOwner(id, "subscribe");
+        } else {
+            return new ModelAndView("403");
+        }
+    }
+
+    @RequestMapping(value = "/courses/{id}/subscribe", method = RequestMethod.POST)
+    public void SubscribeOnCourse(final HttpServletResponse resp,
+            @PathVariable(ID) String id) throws IOException {
+
+        courseService.getById(Integer.parseInt(id))
+                .addSubscriber(userService.getUserByEmail(authenticatedUser.getUserEmail()));
+        resp.sendRedirect("/courses");
+    }
+
+    private ModelAndView AddCourseAndOwner(String id, String modelName) {
         ModelAndView mav = new ModelAndView("troublePage");
 
         if (ifCourseExist(id)) {
-            mav = new ModelAndView("subscribe");
+            mav = new ModelAndView(modelName);
             Course course = courseService.getById(Integer.parseInt(id));
             mav.addObject("course", course);
 
