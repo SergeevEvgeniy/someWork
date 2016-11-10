@@ -39,9 +39,9 @@ public class CoursesController {
         return model;
     }
 
-    private boolean ifCourseExist(String id) {
-        int id_int = Integer.parseInt(id);
-        final Course course = courseService.getById(id_int);
+    private boolean courseExist(String id) {
+        int courseId = Integer.parseInt(id);
+        final Course course = courseService.getById(courseId);
         if (course == null) {
             return false;
         } else {
@@ -53,7 +53,7 @@ public class CoursesController {
     public ModelAndView details(@PathVariable(ID) String id) {
         ModelAndView mav;
         try {
-            if (ifCourseExist(id)) {
+            if (courseExist(id)) {
                 mav = new ModelAndView("courseDetails");
                 mav.addObject("course", courseService.getById(Integer.parseInt(id)));
                 try {
@@ -93,7 +93,7 @@ public class CoursesController {
     @RequestMapping(value = "/courses/{id}/update", method = RequestMethod.GET)
     public ModelAndView printForUpdateCourse(@PathVariable(ID) String id) {
         ModelAndView mav = new ModelAndView("troublePage");
-        if (ifCourseExist(id)) {
+        if (courseExist(id)) {
             try {
                 Course course = courseService.getById(Integer.parseInt(id));
                 String ownerEmail = course.getOwner().getEmail();
@@ -112,7 +112,7 @@ public class CoursesController {
     public void updateCourse(final HttpServletResponse resp,
             @ModelAttribute CourseForm courseForm) throws IOException {
 
-        if (ifCourseExist(courseForm.getCourseId())) {
+        if (courseExist(courseForm.getCourseId())) {
             Course course = courseService.getById(Integer.parseInt(courseForm.getCourseId()));
             course.setName(courseForm.getName());
             course.setDescription(courseForm.getDescription());
@@ -137,16 +137,16 @@ public class CoursesController {
     @RequestMapping(value = "/courses/{id}/subscribe", method = RequestMethod.POST)
     public void SubscribeOnCourse(final HttpServletResponse resp,
             @PathVariable(ID) String id) throws IOException {
-
-        courseService.getById(Integer.parseInt(id))
-                .addSubscriber(userService.getUserByEmail(authenticatedUser.getUserEmail()));
+        courseService.addSubscriber(
+                Integer.parseInt(id),
+                userService.getUserByEmail(authenticatedUser.getUserEmail()));
         resp.sendRedirect("/courses");
     }
 
     private ModelAndView AddCourseAndOwner(String id, String modelName) {
         ModelAndView mav = new ModelAndView("troublePage");
 
-        if (ifCourseExist(id)) {
+        if (courseExist(id)) {
             mav = new ModelAndView(modelName);
             Course course = courseService.getById(Integer.parseInt(id));
             mav.addObject("course", course);

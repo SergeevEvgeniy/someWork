@@ -1,11 +1,11 @@
 package com.epam.tc.model;
 
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -27,13 +27,11 @@ public class Course implements Serializable {
     private String description;
     private String links;
 
-    @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(name = "Subscribe",
-            joinColumns = {
-                @JoinColumn(name = "CourseId")},
-            inverseJoinColumns = {
-                @JoinColumn(name = "UserId")})
-    private Set<User> subscribers = new HashSet<>(0);
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "Course_User", joinColumns = {
+        @JoinColumn(name = "CourseId")}, inverseJoinColumns = {
+        @JoinColumn(name = "UserId")})
+    private Set<User> subscribers;
 
     @ManyToOne
     @JoinColumn(name = "UserId")

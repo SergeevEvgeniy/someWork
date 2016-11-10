@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.epam.tc.dao.course.CourseDao;
+import com.epam.tc.model.User;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -37,5 +38,12 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public void delete(Course course) {
         courseDao.delete(course);
+    }
+
+    @Override
+    public void addSubscriber(int courseId, User subscriber) {
+        Course course = getById(courseId);
+        course.addSubscriber(subscriber);
+        courseDao.update(course);
     }
 }

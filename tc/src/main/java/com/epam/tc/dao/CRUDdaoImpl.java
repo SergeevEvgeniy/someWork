@@ -29,8 +29,8 @@ public abstract class CRUDdaoImpl<EntityType> implements CRUDdao<EntityType> {
         return entityManager.createQuery("select o from " + clazz.getSimpleName() + " o").getResultList();
     }
 
-    public void update(EntityType cerrentEntity) {
-        entityManager.merge(cerrentEntity);
+    public void update(EntityType currentEntity) {
+        entityManager.merge(currentEntity);
     }
 
     public void delete(EntityType currentEntity) {

@@ -1,16 +1,12 @@
 package com.epam.tc.model;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -26,13 +22,6 @@ public class User implements Serializable {
     private String email;
     private String login;
     private String password;
-
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "subscribers")
-    private Set<Course> courses = new HashSet<>(0);
-    
-    public Set<Course> getStocks() {
-        return this.courses;
-    }
 
     @ManyToOne
     @JoinColumn(name = "RoleId")

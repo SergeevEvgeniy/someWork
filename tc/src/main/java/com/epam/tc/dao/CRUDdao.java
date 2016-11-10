@@ -4,13 +4,13 @@ import java.util.List;
 
 public interface CRUDdao<EntityType> {
 
-    public void create(EntityType object);
+    public void create(EntityType entity);
 
     public EntityType getById(int id);
 
     public List<EntityType> getAll();
 
-    public void update(EntityType object);
+    public void update(EntityType entity);
 
-    public void delete(EntityType object);
+    public void delete(EntityType entity);
 }

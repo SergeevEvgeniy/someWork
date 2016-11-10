@@ -1,13 +1,18 @@
 package com.epam.tc.dao.course;
 
+import com.epam.tc.config.BeanConfig;
 import com.epam.tc.dao.CRUDdaoImpl;
 import com.epam.tc.model.Course;
+import com.epam.tc.model.User;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 @Repository
 public class CourseDaoImpl extends CRUDdaoImpl<Course> implements CourseDao {
@@ -22,7 +27,7 @@ public class CourseDaoImpl extends CRUDdaoImpl<Course> implements CourseDao {
     }
 
     @Override
-    public Course getByName(String name) {  
+    public Course getByName(String name) {
         try {
             return entityManager.createQuery("select c from Course c where c.name = :name", Course.class)
                     .setParameter("name", name)
@@ -33,4 +38,8 @@ public class CourseDaoImpl extends CRUDdaoImpl<Course> implements CourseDao {
             return null;
         }
     }
+
+    @Override
+    public void addSubscriber(int courseId, int userId) {
+        }
 }

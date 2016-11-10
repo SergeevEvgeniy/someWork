@@ -18,14 +18,14 @@ public class DefaultValuePopulator {
     private UserRoleService userRoleService;
 
     public void initDBvaluesIsEmpty() {
-        if (courseService.getAll().isEmpty()) {
-            setDefaultCourses();
-        }
         if (userRoleService.getAll().isEmpty()) {
             setDefaultUserRoles();
         }
         if (userService.getAll().isEmpty()) {
-            SetDefaultUsers();
+            setDefaultUsers();
+        }
+        if (courseService.getAll().isEmpty()) {
+            setDefaultCourses();
         }
     }
 
@@ -33,27 +33,35 @@ public class DefaultValuePopulator {
         Course course;
 
         course = new Course("Draft");
+        course.setOwner(userService.getUserByLogin("lecturer-a"));
         courseService.create(course);
 
         course = new Course("Proposal");
+        course.setOwner(userService.getUserByLogin("lecturer-a"));
         courseService.create(course);
 
         course = new Course("Rejected");
+        course.setOwner(userService.getUserByLogin("lecturer-a"));
         courseService.create(course);
 
         course = new Course("New");
+        course.setOwner(userService.getUserByLogin("lecturer-a"));
         courseService.create(course);
 
         course = new Course("Open");
+        course.setOwner(userService.getUserByLogin("lecturer-a"));
         courseService.create(course);
 
         course = new Course("Ready");
+        course.setOwner(userService.getUserByLogin("lecturer-a"));
         courseService.create(course);
 
         course = new Course("In Progress");
+        course.setOwner(userService.getUserByLogin("lecturer-a"));
         courseService.create(course);
 
         course = new Course("Finished");
+        course.setOwner(userService.getUserByLogin("lecturer-a"));
         courseService.create(course);
     }
 
@@ -73,7 +81,7 @@ public class DefaultValuePopulator {
         userRoleService.create(userRole);
     }
 
-    private void SetDefaultUsers() {
+    private void setDefaultUsers() {
         User user;
 
         user = new User("km@tc.edu", "km", "123", userRoleService.getURbyName("Knowledge Manager"));

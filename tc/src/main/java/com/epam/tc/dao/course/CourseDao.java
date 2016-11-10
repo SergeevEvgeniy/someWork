@@ -6,4 +6,6 @@ import com.epam.tc.model.Course;
 public interface CourseDao extends CRUDdao<Course> {
 
     public Course getByName(String name);
+    
+    public void addSubscriber(int courseId, int userId);
 }
