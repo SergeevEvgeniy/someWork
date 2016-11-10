@@ -1,12 +1,17 @@
 package com.epam.tc.model;
 
 import java.io.Serializable;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -22,9 +27,23 @@ public class Course implements Serializable {
     private String description;
     private String links;
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "Course_User", joinColumns = {
+        @JoinColumn(name = "CourseId")}, inverseJoinColumns = {
+        @JoinColumn(name = "UserId")})
+    private Set<User> subscribers;
+
     @ManyToOne
     @JoinColumn(name = "UserId")
     private User owner;
+
+    public Set<User> getSubscribers() {
+        return this.subscribers;
+    }
+
+    public void addSubscriber(User subscriber) {
+        this.subscribers.add(subscriber);
+    }
 
     public User getOwner() {
         return owner;

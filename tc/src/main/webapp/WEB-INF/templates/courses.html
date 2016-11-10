@@ -32,6 +32,9 @@
                         <td sec:authorize="hasAuthority('Lector')">
                             <a class="btn btn-mini" th:href="@{/courses/} + ${course.id}+ @{/update}">Update</a>
                         </td>
+                        <td sec:authorize="hasAuthority('User')">
+                            <a class="btn btn-mini" th:href="@{/courses/} + ${course.id}+ @{/subscribe}">Subscribe</a>
+                        </td>
                     </tr>
                 </tbody>
             </table>
