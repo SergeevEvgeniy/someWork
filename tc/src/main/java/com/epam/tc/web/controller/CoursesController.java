@@ -121,4 +121,11 @@ public class CoursesController {
                 userService.getUserByEmail(authenticatedUser.getUserEmail()));
         resp.sendRedirect("/courses");
     }
+
+    @RequestMapping(value = "/courses/{id}/attend", method = RequestMethod.GET)
+    public ModelAndView printAttendess(@PathVariable(ID) String id) {
+        ModelAndView mav = new ModelAndView("attend");
+        mav.addObject("course", getCourse(id));
+        return mav.addObject("user", authenticatedUser.getUserEmail());
+    }
 }
