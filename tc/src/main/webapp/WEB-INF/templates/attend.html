@@ -11,7 +11,7 @@
                     <script th:replace="logoutHeader"></script>
                 </h1>
             </header>
-            <form class="form-horizontal">
+            <form class="form-horizontal" th:action="@{'/courses/'+${course.id}+'/attend'}" method="post">
                 <fieldset>
                     <div class="control-group">
                         <div class="control-label">

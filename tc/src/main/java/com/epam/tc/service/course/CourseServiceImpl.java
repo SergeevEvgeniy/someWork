@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.epam.tc.dao.course.CourseDao;
 import com.epam.tc.model.User;
+import com.epam.tc.security.AuthenticatedUser;
+import com.epam.tc.service.user.UserService;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -14,6 +16,10 @@ public class CourseServiceImpl implements CourseService {
 
     @Autowired
     private CourseDao courseDao;
+    @Autowired
+    private AuthenticatedUser authenticatedUser;
+    @Autowired
+    private UserService userService;
 
     @Override
     public void create(Course course) {
@@ -44,6 +50,13 @@ public class CourseServiceImpl implements CourseService {
     public void addSubscriber(int courseId, User subscriber) {
         Course course = getById(courseId);
         course.addSubscriber(subscriber);
+        courseDao.update(course);
+    }
+    
+    @Override
+    public void addAttender(int courseId, User attender) {
+        Course course = getById(courseId);
+        course.addAttender(attender);
         courseDao.update(course);
     }
 }

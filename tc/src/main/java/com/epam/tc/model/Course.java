@@ -27,21 +27,39 @@ public class Course implements Serializable {
     private String links;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "Course_User", joinColumns = {
+    @JoinTable(name = "subscribers", joinColumns = {
         @JoinColumn(name = "CourseId")}, inverseJoinColumns = {
         @JoinColumn(name = "UserId")})
     private Set<User> subscribers;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "attenders", joinColumns = {
+        @JoinColumn(name = "CourseId")}, inverseJoinColumns = {
+        @JoinColumn(name = "UserId")})
+    private Set<User> attenders;
 
     @ManyToOne
     @JoinColumn(name = "UserId")
     private User owner;
 
+    public boolean isSubscribed(User user) {
+        return subscribers.contains(user);
+    }
+
     public Set<User> getSubscribers() {
         return this.subscribers;
     }
 
+    public Set<User> getAttenders() {
+        return attenders;
+    }
+
     public void addSubscriber(User subscriber) {
         this.subscribers.add(subscriber);
+    }
+
+    public void addAttender(User attender) {
+        this.attenders.add(attender);
     }
 
     public User getOwner() {

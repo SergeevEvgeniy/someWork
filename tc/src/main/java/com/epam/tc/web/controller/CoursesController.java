@@ -35,6 +35,7 @@ public class CoursesController {
     public Model courses(Model model) {
         model.addAttribute("user", authenticatedUser.getUserEmail());
         model.addAttribute("courses", courseService.getAll());
+        model.addAttribute("subscriber", userService.getUserByEmail(authenticatedUser.getUserEmail()));
         return model;
     }
 
@@ -124,8 +125,24 @@ public class CoursesController {
 
     @RequestMapping(value = "/courses/{id}/attend", method = RequestMethod.GET)
     public ModelAndView printAttendess(@PathVariable(ID) String id) {
-        ModelAndView mav = new ModelAndView("attend");
-        mav.addObject("course", getCourse(id));
+        ModelAndView mav;
+        Course course = getCourse(id);
+        String username = authenticatedUser.getUserEmail();
+
+        if (course.isSubscribed(userService.getUserByEmail(username))) {
+            mav = new ModelAndView("attend");
+            mav.addObject("course", course);
+        } else {
+            mav = new ModelAndView("403");
+        }
         return mav.addObject("user", authenticatedUser.getUserEmail());
+    }
+
+    @RequestMapping(value = "/courses/{id}/attend", method = RequestMethod.POST)
+    public void AttendOnCourse(final HttpServletResponse resp,
+            @PathVariable(ID) String id) throws IOException {
+        courseService.addAttender(Integer.parseInt(id),
+                userService.getUserByEmail(authenticatedUser.getUserEmail()));
+        resp.sendRedirect("/courses");
     }
 }
