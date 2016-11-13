@@ -145,4 +145,12 @@ public class CoursesController {
                 userService.getUserByEmail(authenticatedUser.getUserEmail()));
         resp.sendRedirect("/courses");
     }
+
+    @RequestMapping(value = "/courses/{id}/evaluate", method = RequestMethod.GET)
+    public ModelAndView evaluate(@PathVariable(ID) String id) {
+        ModelAndView mav = new ModelAndView("evaluate");
+        mav.addObject("course", getCourse(id));
+        return mav.addObject("user", authenticatedUser.getUserEmail());
+    }
+
 }
