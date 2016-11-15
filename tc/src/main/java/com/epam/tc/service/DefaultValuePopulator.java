@@ -47,22 +47,31 @@ public class DefaultValuePopulator {
         course = new Course("New");
         course.setOwner(userService.getUserByLogin("lecturer-a"));
         courseService.create(course);
+        courseService.addSubscriber(course.getId(), userService.getUserByLogin("user-a"));
 
         course = new Course("Open");
         course.setOwner(userService.getUserByLogin("lecturer-a"));
         courseService.create(course);
+        courseService.addSubscriber(course.getId(), userService.getUserByLogin("user-b"));
+        courseService.addAttender(course.getId(), userService.getUserByLogin("user-a"));
 
         course = new Course("Ready");
         course.setOwner(userService.getUserByLogin("lecturer-a"));
         courseService.create(course);
+        courseService.addAttender(course.getId(), userService.getUserByLogin("user-a"));
+        courseService.addAttender(course.getId(), userService.getUserByLogin("user-b"));
 
         course = new Course("In Progress");
         course.setOwner(userService.getUserByLogin("lecturer-a"));
         courseService.create(course);
+        courseService.addAttender(course.getId(), userService.getUserByLogin("user-a"));
+        courseService.addAttender(course.getId(), userService.getUserByLogin("user-b"));
 
         course = new Course("Finished");
         course.setOwner(userService.getUserByLogin("lecturer-a"));
         courseService.create(course);
+        courseService.addAttender(course.getId(), userService.getUserByLogin("user-a"));
+        courseService.addAttender(course.getId(), userService.getUserByLogin("user-b"));
     }
 
     private void setDefaultUserRoles() {

@@ -1,6 +1,7 @@
 package com.epam.tc.model;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -32,11 +34,13 @@ public class Course implements Serializable {
         @JoinColumn(name = "UserId")})
     private Set<User> subscribers;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "attenders", joinColumns = {
-        @JoinColumn(name = "CourseId")}, inverseJoinColumns = {
-        @JoinColumn(name = "UserId")})
-    private Set<User> attenders;
+//    @ManyToMany(cascade = CascadeType.ALL)
+//    @JoinTable(name = "attenders", joinColumns = {
+//        @JoinColumn(name = "CourseId")}, inverseJoinColumns = {
+//        @JoinColumn(name = "UserId")})
+//    private HashMap<User, Integer> attenders;
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    private Set<Evaluate> attenders;
 
     @ManyToOne
     @JoinColumn(name = "UserId")
@@ -46,12 +50,23 @@ public class Course implements Serializable {
         return subscribers.contains(user);
     }
 
+    public boolean isAttended(User user) {
+        if (attenders.stream().anyMatch((attender) -> (attender.getUser() == user))) {
+            return true;
+        }
+        return false;
+    }
+
     public Set<User> getSubscribers() {
         return this.subscribers;
     }
 
-    public Set<User> getAttenders() {
+    public Set<Evaluate> getAttenders() {
         return attenders;
+    }
+
+    public void setAttenders(Set<Evaluate> attenders) {
+        this.attenders = attenders;
     }
 
     public void addSubscriber(User subscriber) {
@@ -59,7 +74,8 @@ public class Course implements Serializable {
     }
 
     public void addAttender(User attender) {
-        this.attenders.add(attender);
+        Evaluate evaluate = new Evaluate(attender, this, null);
+        this.attenders.add(evaluate);
     }
 
     public User getOwner() {

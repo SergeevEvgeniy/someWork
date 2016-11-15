@@ -34,8 +34,13 @@
                         </td>
                         <td sec:authorize="hasAuthority('User')">
                             <a class="btn btn-mini" 
-                               th:href="@{${course.isSubscribed(subscriber)}?'/courses/'+${course.getId()}+ '/attend':'/courses/'+${course.getId()}+ '/subscribe'}"
-                               th:text="${course.isSubscribed(subscriber)?'Attend':'Subscribe'}"></a>
+                               th:if="${not course.isSubscribed(userEmail) and  not course.isAttended(userEmail)}"
+                               th:href="'/courses/'+${course.getId()}+ '/subscribe'">Subscribe</a>
+                            <a class="btn btn-mini"
+                               th:if="${course.isSubscribed(userEmail) and  not course.isAttended(userEmail)}"
+                               th:href="'/courses/'+${course.getId()}+ '/attend'">Attend</a>
+                            <a class="btn btn-mini" th:if="${course.isAttended(userEmail)}"
+                               th:href="'/courses/'+${course.getId()}+ '/evaluate'">Evaluate</a>
                         </td>
                     </tr>
                 </tbody>

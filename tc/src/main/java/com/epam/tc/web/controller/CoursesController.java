@@ -3,6 +3,7 @@ package com.epam.tc.web.controller;
 import com.epam.tc.exception.CourseNotFoundException;
 import com.epam.tc.exception.IdParsingException;
 import com.epam.tc.model.Course;
+import com.epam.tc.model.User;
 import com.epam.tc.security.AuthenticatedUser;
 import com.epam.tc.service.course.CourseService;
 import com.epam.tc.service.user.UserService;
@@ -10,6 +11,8 @@ import com.epam.tc.web.forms.CourseForm;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,7 +38,7 @@ public class CoursesController {
     public Model courses(Model model) {
         model.addAttribute("user", authenticatedUser.getUserEmail());
         model.addAttribute("courses", courseService.getAll());
-        model.addAttribute("subscriber", userService.getUserByEmail(authenticatedUser.getUserEmail()));
+        model.addAttribute("userEmail", userService.getUserByEmail(authenticatedUser.getUserEmail()));
         return model;
     }
 
@@ -140,17 +143,45 @@ public class CoursesController {
 
     @RequestMapping(value = "/courses/{id}/attend", method = RequestMethod.POST)
     public void AttendOnCourse(final HttpServletResponse resp,
-            @PathVariable(ID) String id) throws IOException {
-        courseService.addAttender(Integer.parseInt(id),
+            @PathVariable(ID) int courseId) throws IOException {
+        courseService.addAttender(courseId,
                 userService.getUserByEmail(authenticatedUser.getUserEmail()));
         resp.sendRedirect("/courses");
     }
 
     @RequestMapping(value = "/courses/{id}/evaluate", method = RequestMethod.GET)
     public ModelAndView evaluate(@PathVariable(ID) String id) {
-        ModelAndView mav = new ModelAndView("evaluate");
-        mav.addObject("course", getCourse(id));
+        ModelAndView mav;
+        Course course = getCourse(id);
+        String username = authenticatedUser.getUserEmail();
+
+        if (course.isAttended(userService.getUserByEmail(username))) {
+            mav = new ModelAndView("evaluate");
+            mav.addObject("course", course);
+        } else {
+            mav = new ModelAndView("403");
+        }
         return mav.addObject("user", authenticatedUser.getUserEmail());
     }
 
+    private static final Logger LOG = LoggerFactory.getLogger(CoursesController.class);
+
+    @RequestMapping(value = "/courses/{id}/evaluate", method = RequestMethod.POST)
+    public void EvaluateCourse(final HttpServletRequest req,
+            final HttpServletResponse resp, @PathVariable(ID) int courseId) throws IOException {
+        try {
+            int grade = Integer.parseInt(req.getParameter("grade"));
+
+            if ((grade >= 1) && (grade <= 5)) {
+                User user = userService.getUserByEmail(authenticatedUser.getUserEmail());
+                courseService.setGrade(courseId, user, grade);
+            } else {
+                LOG.warn("Incorect grade value: ");
+            }
+        } catch (NumberFormatException nfe) {
+            throw new IdParsingException("Cannot parse to int grade: " + req.getParameter("grade"), nfe);
+        }
+
+        resp.sendRedirect("/courses");
+    }
 }

@@ -17,6 +17,8 @@ public interface CourseService {
     void update(Course course);
 
     void addSubscriber(int courseId, User subscriber);
-    
+
     void addAttender(int courseId, User attender);
+
+    void setGrade(int courseId, User attender, int grade);
 }

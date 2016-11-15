@@ -12,7 +12,7 @@
                     <script th:replace="logoutHeader"></script>
                 </h1>
             </header>
-            <form class="form-horizontal">
+            <form class="form-horizontal" th:action="'/courses/'+${course.getId()}+ '/evaluate'" method="post">
                 <fieldset>
                     <div class="control-group">
                         <div class="control-label">
@@ -29,7 +29,7 @@
                     <div class="control-group">
                         <label id="gradeField" class="control-label">Grade</label>
                         <div class="controls">
-                            <input class="span2" type="text"/>
+                            <input class="span2" type="number" min="1" max="5" required name="grade"/>
                         </div>
                     </div>
                     <div class="form-actions">
