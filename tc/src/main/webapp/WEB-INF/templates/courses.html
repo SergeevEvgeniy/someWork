@@ -34,10 +34,11 @@
                         <td sec:authorize="hasAuthority('Lector')">
                             <a class="btn btn-mini" th:href="@{/courses/} + ${course.id}+ @{/update}">Update</a>
                         </td>
-                        <td sec:authorize="hasAuthority('User')" 
-                            th:text="${course.getSubscribers().size()>0?course.getSubscribers().size():'0'}
-                            +'/'+
-                            ${course.getAttenders().size()>0?course.getAttenders().size():'0'}">
+                        <td sec:authorize="hasAuthority('User')">
+                            <a th:href="@{'/courses/'+${course.getId()}+ '/participants'}"
+                               th:text="${course.getSubscribers().size()>0?course.getSubscribers().size():'0'}
+                               +'/'+ ${course.getAttenders().size()>0?course.getAttenders().size():'0'}"> 
+                            </a> 
                         </td>
                         <td sec:authorize="hasAuthority('User')" 
                             th:text="${course.getAverageGrade()}">

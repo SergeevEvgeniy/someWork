@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <script th:replace="headerLinks"></script>
+        <title>Participant page</title>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>
+                    Participant
+                    <script th:replace="logoutHeader"></script>
+                </h1>
+            </header>
+            <div class="form-horizontal">
+                <div class="control-group">
+                    <div class="control-label">Name</div>
+                    <div id="titleField" class="controls text" th:text="${course.name}"></div>
+                </div>
+                <div class="control-group">
+                    <div class="control-label">Lecturer</div>
+                    <div id="ownerField" class="controls text" th:text="${course.owner.email}"></div>
+                </div>
+                <div class="form-actions">
+                    <a class="btn" href="/courses">Back</a>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

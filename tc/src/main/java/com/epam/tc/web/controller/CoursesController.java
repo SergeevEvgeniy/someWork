@@ -181,7 +181,13 @@ public class CoursesController {
         } catch (NumberFormatException nfe) {
             throw new IdParsingException("Cannot parse to int grade: " + req.getParameter("grade"), nfe);
         }
-
         resp.sendRedirect("/courses");
+    }
+
+    @RequestMapping(value = {"/courses/{id}/participants"}, method = RequestMethod.GET)
+    public ModelAndView participants(@PathVariable(ID) String id) {
+        ModelAndView mav = new ModelAndView("participants");
+        mav.addObject("course", getCourse(id));
+        return mav.addObject("user", authenticatedUser.getUserEmail());
     }
 }
