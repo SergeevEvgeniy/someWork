@@ -38,7 +38,7 @@ public class CoursesController {
     public Model courses(Model model) {
         model.addAttribute("user", authenticatedUser.getUserEmail());
         model.addAttribute("courses", courseService.getAll());
-        model.addAttribute("userEmail", userService.getUserByEmail(authenticatedUser.getUserEmail()));
+        model.addAttribute("person", userService.getUserByEmail(authenticatedUser.getUserEmail()));
         return model;
     }
 
@@ -155,7 +155,7 @@ public class CoursesController {
         Course course = getCourse(id);
         User user = userService.getUserByEmail(authenticatedUser.getUserEmail());
 
-        if ((course.isAttended(user)) && (!course.isHaveGrade())) {
+        if ((course.isAttended(user)) && (!course.isHaveGrade(user))) {
             mav = new ModelAndView("evaluate");
             mav.addObject("course", course);
         } else {
