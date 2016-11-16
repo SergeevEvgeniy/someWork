@@ -39,7 +39,7 @@
                             <a class="btn btn-mini"
                                th:if="${course.isSubscribed(userEmail) and  not course.isAttended(userEmail)}"
                                th:href="'/courses/'+${course.getId()}+ '/attend'">Attend</a>
-                            <a class="btn btn-mini" th:if="${course.isAttended(userEmail)}"
+                            <a class="btn btn-mini" th:if="${course.isAttended(userEmail) and  not course.isHaveGrade()}"
                                th:href="'/courses/'+${course.getId()}+ '/evaluate'">Evaluate</a>
                         </td>
                     </tr>

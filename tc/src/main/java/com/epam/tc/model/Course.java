@@ -34,11 +34,6 @@ public class Course implements Serializable {
         @JoinColumn(name = "UserId")})
     private Set<User> subscribers;
 
-//    @ManyToMany(cascade = CascadeType.ALL)
-//    @JoinTable(name = "attenders", joinColumns = {
-//        @JoinColumn(name = "CourseId")}, inverseJoinColumns = {
-//        @JoinColumn(name = "UserId")})
-//    private HashMap<User, Integer> attenders;
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     private Set<Evaluate> attenders;
 
@@ -51,10 +46,12 @@ public class Course implements Serializable {
     }
 
     public boolean isAttended(User user) {
-        if (attenders.stream().anyMatch((attender) -> (attender.getUser() == user))) {
-            return true;
-        }
-        return false;
+        return attenders.stream().anyMatch((attender) -> (attender.getUser() == user));
+    }
+
+    public boolean isHaveGrade() {
+        return attenders.stream().anyMatch((attender)
+                -> ((attender.getCourse() == this) && (attender.getGrade() != null)));
     }
 
     public Set<User> getSubscribers() {

@@ -153,9 +153,9 @@ public class CoursesController {
     public ModelAndView evaluate(@PathVariable(ID) String id) {
         ModelAndView mav;
         Course course = getCourse(id);
-        String username = authenticatedUser.getUserEmail();
+        User user = userService.getUserByEmail(authenticatedUser.getUserEmail());
 
-        if (course.isAttended(userService.getUserByEmail(username))) {
+        if ((course.isAttended(user)) && (!course.isHaveGrade())) {
             mav = new ModelAndView("evaluate");
             mav.addObject("course", course);
         } else {
