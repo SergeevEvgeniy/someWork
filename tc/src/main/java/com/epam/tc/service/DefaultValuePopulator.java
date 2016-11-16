@@ -73,7 +73,7 @@ public class DefaultValuePopulator {
         courseService.addAttender(course.getId(), userService.getUserByLogin("user-a"));
         courseService.addAttender(course.getId(), userService.getUserByLogin("user-b"));
     }
-
+        
     private void setDefaultUserRoles() {
         UserRole userRole;
 

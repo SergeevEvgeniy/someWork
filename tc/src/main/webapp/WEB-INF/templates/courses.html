@@ -20,7 +20,8 @@
                     <tr>
                         <th class="span1">Id</th>
                         <th>Course</th>
-                        <th>Action</th>
+                        <th class="span1">S/A</th>
+                        <th class="span2">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -32,6 +33,7 @@
                         <td sec:authorize="hasAuthority('Lector')">
                             <a class="btn btn-mini" th:href="@{/courses/} + ${course.id}+ @{/update}">Update</a>
                         </td>
+                        <td sec:authorize="hasAuthority('User')" th:text="${course.getSubscribers().size()>0?course.getSubscribers().size():''}"></td>
                         <td sec:authorize="hasAuthority('User')">
                             <a class="btn btn-mini" 
                                th:if="${not course.isSubscribed(userEmail) and  not course.isAttended(userEmail)}"
