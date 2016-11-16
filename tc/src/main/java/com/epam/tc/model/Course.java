@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -20,6 +22,18 @@ public class Course implements Serializable {
     private String description;
     private String links;
 
+    @ManyToOne
+    @JoinColumn(name = "UserId")
+    private User owner;
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
     public int getId() {
         return id;
     }
@@ -33,6 +47,13 @@ public class Course implements Serializable {
 
     public Course(String name) {
         this.name = name;
+    }
+
+    public Course(String name, String description, String links, User user) {
+        this.name = name;
+        this.description = description;
+        this.links = links;
+        this.owner = user;
     }
 
     public String getName() {
@@ -57,5 +78,5 @@ public class Course implements Serializable {
 
     public void setLinks(String links) {
         this.links = links;
-    }    
+    }
 }
