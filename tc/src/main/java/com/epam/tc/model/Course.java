@@ -85,6 +85,10 @@ public class Course implements Serializable {
         this.subscribers.add(subscriber);
     }
 
+    public void deleteSubscriber(User subscriber) {
+        this.subscribers.remove(subscriber);
+    }
+
     public void addAttender(User attender) {
         Evaluate evaluate = new Evaluate(attender, this, null);
         this.attenders.add(evaluate);
