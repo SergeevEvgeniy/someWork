@@ -38,8 +38,7 @@ public class CoursesController {
     private static final String COURSEID = "courseId";
 
     @RequestMapping(value = {"/courses", "/*"}, method = RequestMethod.GET)
-    public Model courses(Model model,
-            @ModelAttribute("user") AuthenticatedUser authenticatedUser) {
+    public Model courses(Model model, @ModelAttribute("user") AuthenticatedUser authenticatedUser) {
         model.addAttribute("courses", courseService.getAll());
         model.addAttribute("person", userService.getUserByEmail(authenticatedUser.getUserEmail()));
         return model;
@@ -175,8 +174,8 @@ public class CoursesController {
     private static final Logger LOG = LoggerFactory.getLogger(CoursesController.class);
 
     @RequestMapping(value = "/courses/{courseId}/evaluate", method = RequestMethod.POST)
-    public void evaluateCourse(final HttpServletRequest req,
-            final HttpServletResponse resp, @PathVariable(COURSEID) String courseId) throws IOException {
+    public void evaluateCourse(final HttpServletRequest req, final HttpServletResponse resp,
+            @PathVariable(COURSEID) String courseId) throws IOException {
         try {
             int grade = Integer.parseInt(req.getParameter("grade"));
             Course course = getCourse(courseId);
@@ -197,6 +196,14 @@ public class CoursesController {
             @ModelAttribute("user") AuthenticatedUser authenticatedUser) {
         ModelAndView mav = new ModelAndView("participants");
         mav.addObject("course", getCourse(courseId));
+        return mav;
+    }
+
+    @RequestMapping(value = {"/mycourses"}, method = RequestMethod.GET)
+    public ModelAndView myCourses(@ModelAttribute("user") AuthenticatedUser authenticatedUser) {
+        ModelAndView mav = new ModelAndView("myCourses");
+        User user = userService.getUserByEmail(authenticatedUser.getUserEmail());
+        mav.addObject("courses", courseService.getUserCoursesList(user));
         return mav;
     }
 }

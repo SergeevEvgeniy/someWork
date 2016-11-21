@@ -1,0 +1,41 @@
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th class="span1">Id</th>
+            <th>Course</th>
+            <th sec:authorize="hasAuthority('User')" class="span1">S/A</th>
+            <th sec:authorize="hasAuthority('User')" class="span1">Grade</th>
+            <th class="span2">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="course: ${courses}">
+            <td th:text="${course.id}">Id</td>
+            <td>
+                <a th:href="@{/courses/} + ${course.id}" th:text="${course.name}">Course </a>
+            </td>
+            <td sec:authorize="hasAuthority('Lector')">
+                <a class="btn btn-mini" th:href="@{/courses/} + ${course.id}+ @{/update}">Update</a>
+            </td>
+            <td sec:authorize="hasAuthority('User')">
+                <a th:href="@{'/courses/'+${course.getId()}+ '/participants'}"
+                   th:text="${course.getSubscribers().size()>0?course.getSubscribers().size():'0'}
+                   +'/'+ ${course.getAttenders().size()>0?course.getAttenders().size():'0'}"> 
+                </a> 
+            </td>
+            <td sec:authorize="hasAuthority('User')" 
+                th:text="${course.getAverageGrade()}">
+            </td>
+            <td sec:authorize="hasAuthority('User')">
+                <a class="btn btn-mini" 
+                   th:if="${not course.isSubscribed(person) and  not course.isAttended(person)}"
+                   th:href="'/courses/'+${course.getId()}+ '/subscribe'">Subscribe</a>
+                <a class="btn btn-mini"
+                   th:if="${course.isSubscribed(person) and  not course.isAttended(person)}"
+                   th:href="'/courses/'+${course.getId()}+ '/attend'">Attend</a>
+                <a class="btn btn-mini" th:if="${course.isAttended(person) and  not course.hasGrade(person)}"
+                   th:href="'/courses/'+${course.getId()}+ '/evaluate'">Evaluate</a>
+            </td>
+        </tr>
+    </tbody>
+</table>

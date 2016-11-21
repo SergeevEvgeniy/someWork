@@ -12,6 +12,8 @@ public interface CourseService {
 
     List<Course> getAll();
 
+    List<Course> getUserCoursesList(User user);
+
     Course getById(int id);
 
     void update(Course course);
