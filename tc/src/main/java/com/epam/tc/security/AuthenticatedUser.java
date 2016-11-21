@@ -12,12 +12,13 @@ public class AuthenticatedUser {
     private static final Logger LOG = LoggerFactory.getLogger(AuthenticatedUser.class);
 
     public String getUserEmail() {
-        try {
-            UserDetails ud = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (!principal.equals("anonymousUser")) {
+            UserDetails ud = (UserDetails) principal;
             return ud.getUsername();
-        } catch (ClassCastException ex) {
-            LOG.warn("Not authenticated  user");
-            return "surfer";
+        } else {
+            LOG.info("anonymousUser in system");
+            return "anonymousUser";
         }
     }
 }
