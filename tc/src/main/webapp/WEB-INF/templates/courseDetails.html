@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="utf-8"/>
+        <title> Course Details </title>
         <script th:replace="headerLinks"></script>
     </head>
     <body>
@@ -12,29 +12,47 @@
                     <script th:replace="logoutHeader"></script>
                 </h1>
             </header>
-            <table class="table table-striped table-bordered">
-                <tbody>
-                    <tr> 
-                        <td> Name </td>
-                        <td th:text="${course.name}"></td>
-                    </tr>
-                    <tr>
-                        <td>Lecturer</td>
-                        <td th:text="${course.owner.email}"></td>
-                    </tr>
-                    <tr>
-                        <td>Descrition</td>
-                        <td th:text="${course.description}"></td>
-                    </tr>
-                    <tr>
-                        <td>Link</td>
-                        <td th:text="${course.links}"></td>
-                    </tr>
-                </tbody>
-                <div class="form-actions">
-                    <a class="btn" href="/courses">Back</a>
+            <div class="form-horizontal">
+                <div class="control-group">
+                    <div class="control-label">Name</div>
+                    <div id="titleField" class="controls text" th:text="${course.name}"></div>
                 </div>
-            </table>
-        </div>
+                <div class="control-group">
+                    <div class="control-label">Owner</div>
+                    <div id="linksField" class="controls text" th:text="${course.owner.email}"></div>
+                </div>
+                <div class="control-group">
+                    <div class="control-label">Description</div>
+                    <div id="linksField" class="controls text" th:text="${course.description}"></div>
+                </div>
+                <div class="control-group">
+                    <div class="control-label">Links</div>
+                    <div id="linksField" class="controls text" th:text="${course.links}"></div>
+                </div>
+                <div class="control-group" th:if="${course.subscribers.size() &gt; 0}">
+                    <div class="control-label">Subscribers</div>
+                    <div id="subscribersField" class="controls text"> 
+                        <a th:href="@{'/courses/'+${course.id}+ '/participants'}"
+                           th:text="${course.subscribers.size()}">
+                        </a>
+                    </div>
+                </div>
+                <div class="control-group" th:if="${course.attenders.size() &gt; 0}">
+                    <div class="control-label">Attendee</div>
+                    <div id="attendeeField" class="controls text"> 
+                        <a th:href="@{'/courses/'+${course.id}+ '/participants'}"
+                           th:text="${course.attenders.size()}">
+                        </a>
+                    </div>
+                </div>
+                <div class="control-group" th:if="${course.getAverageGrade() &gt; 0}">
+                    <div class="control-label">Grade</div>
+                    <div id="attendeeField" class="controls text" th:text="${course.getAverageGrade()}"></div>
+                </div>
+            </div>
+            <div class="form-actions">
+                <a class="btn" href="/courses">Back</a>
+            </div> 
+        </div> 
     </body>
 </html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <script th:replace="headerLinks"></script>
+        <title> Subscribe page </title>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>
+                    Subscribe
+                    <script th:replace="logoutHeader"></script>
+                </h1>
+            </header>
+            <form class="form-horizontal" th:action="@{'/courses/'+${course.id}+'/subscribe'}" method="post">
+                <fieldset> 
+                    <div class="control-group">
+                        <div class="control-label">
+                            Course
+                        </div>
+                        <div id="titleField" class="controls text" th:text="${course.name}">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="control-label">
+                            Lecturer
+                        </div>
+                        <div id="ownerField" class="controls text" th:text="${course.owner.email}">
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button id="subscribeButton" class="btn btn-success" type="submit">Subscribe</button>
+                        <a class="btn" href="/courses">Cancel</a>
+                    </div>
+                </fieldset>            
+            </form>
+        </div>
+    </body>
+</html> 

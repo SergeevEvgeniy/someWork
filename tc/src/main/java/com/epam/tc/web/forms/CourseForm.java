@@ -38,5 +38,4 @@ public class CourseForm {
     public void setLinks(String links) {
         this.links = links;
     }
-
 }

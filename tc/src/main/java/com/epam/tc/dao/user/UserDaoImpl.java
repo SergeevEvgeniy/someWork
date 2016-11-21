@@ -21,6 +21,7 @@ public class UserDaoImpl extends CRUDdaoImpl<User> implements UserDao {
         super(User.class);
     }
 
+    @Override
     public User getByLogin(String login) {
         try {
             return entityManager.createQuery("select u from User u where u.login = :login", User.class)
@@ -33,6 +34,7 @@ public class UserDaoImpl extends CRUDdaoImpl<User> implements UserDao {
         }
     }
 
+    @Override
     public User getByEmail(String email) {
         try {
             return entityManager.createQuery("select u from User u where u.email = :email", User.class)

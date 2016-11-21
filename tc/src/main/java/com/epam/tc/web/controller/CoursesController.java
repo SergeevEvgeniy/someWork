@@ -1,9 +1,12 @@
 package com.epam.tc.web.controller;
 
+import com.epam.tc.exception.CourseNotFoundException;
+import com.epam.tc.exception.IdParsingException;
 import com.epam.tc.model.Course;
 import com.epam.tc.model.User;
 import com.epam.tc.security.AuthenticatedUser;
 import com.epam.tc.service.course.CourseService;
+import com.epam.tc.service.evaluate.EvaluateService;
 import com.epam.tc.service.user.UserService;
 import com.epam.tc.web.forms.CourseForm;
 import java.io.IOException;
@@ -12,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -30,48 +32,45 @@ public class CoursesController {
     private AuthenticatedUser authenticatedUser;
     @Autowired
     private UserService userService;
+    @Autowired
+    private EvaluateService evaluateService;
 
-    private static final Logger LOG = LoggerFactory.getLogger(CoursesController.class);
-    private static final String ID = "id";
+    private static final String COURSEID = "courseId";
 
     @RequestMapping(value = {"/courses", "/*"}, method = RequestMethod.GET)
-    public Model courses(Model model) {
-        model.addAttribute("user", authenticatedUser.getUserEmail());
+    public Model courses(Model model,
+            @ModelAttribute("user") AuthenticatedUser authenticatedUser) {
         model.addAttribute("courses", courseService.getAll());
+        model.addAttribute("person", userService.getUserByEmail(authenticatedUser.getUserEmail()));
         return model;
     }
 
-    private boolean ifCourseExist(String id) {
-        int id_int = Integer.parseInt(id);
-        final Course course = courseService.getById(id_int);
-        if (course == null) {
-            return false;
-        } else {
-            return true;
+    private Course getCourse(String courseId) {
+        try {
+            int id = Integer.parseInt(courseId);
+            Course course = courseService.getById(id);
+            if (course == null) {
+                throw new CourseNotFoundException("Course with id: " + courseId + "not found");
+            }
+            return course;
+        } catch (NumberFormatException nfe) {
+            throw new IdParsingException("Cannot parse to int courseId: " + courseId, nfe);
         }
     }
 
-    @RequestMapping(value = {"/courses/{id}"}, method = RequestMethod.GET)
-    public ModelAndView details(@PathVariable(ID) String id) {
+    @RequestMapping(value = {"/courses/{courseId}"}, method = RequestMethod.GET)
+    public ModelAndView details(@PathVariable(COURSEID) String courseId,
+            @ModelAttribute("user") AuthenticatedUser authenticatedUser) {
         ModelAndView mav;
-        try {
-            if (ifCourseExist(id)) {
-                mav = new ModelAndView("courseDetails");
-                mav.addObject("course", courseService.getById(Integer.parseInt(id)));
-            } else {
-                LOG.warn("Not found courses with id=", id);
-                mav = new ModelAndView("troublePage");
-            }
-        } catch (NumberFormatException ex) {
-            LOG.warn("Bad id=", id);
-            mav = new ModelAndView("troublePage");
-        }
-        return mav.addObject("user", authenticatedUser.getUserEmail());
+        mav = new ModelAndView("courseDetails");
+        mav.addObject("course", getCourse(courseId));
+
+        return mav;
     }
 
     @RequestMapping(value = "/courses/create", method = RequestMethod.GET)
-    public ModelAndView createCourse() {
-        return new ModelAndView("create").addObject("user", authenticatedUser.getUserEmail());
+    public ModelAndView createCourse(@ModelAttribute("user") AuthenticatedUser authenticatedUser) {
+        return new ModelAndView("create");
     }
 
     @RequestMapping(value = "/courses/create", method = RequestMethod.POST)
@@ -87,39 +86,117 @@ public class CoursesController {
         resp.sendRedirect("/courses");
     }
 
-    @RequestMapping(value = "/courses/{id}/update", method = RequestMethod.GET)
-    public ModelAndView printForUpdateCourse(@PathVariable(ID) String id) {
+    @RequestMapping(value = "/courses/{courseId}/update", method = RequestMethod.GET)
+    public ModelAndView printForUpdateCourse(@PathVariable(COURSEID) String courseId,
+            @ModelAttribute("user") AuthenticatedUser authenticatedUser) {
         ModelAndView mav = new ModelAndView("troublePage");
-
-        if (ifCourseExist(id)) {
-            int id_int = Integer.parseInt(id);
-            try {
-                Course course = courseService.getById(id_int);
-                if (authenticatedUser.getUserEmail().equals(course.getOwner().getEmail())) {
-                    mav = new ModelAndView("update");
-                    mav.addObject("course", courseService.getById(Integer.parseInt(id)));
-                }
-            } catch (NullPointerException ex) {
-                LOG.warn("This course {0} haven't owner", id_int);
-            }
+        Course course = getCourse(courseId);
+        String ownerEmail = course.getOwner().getEmail();
+        if (ownerEmail.equals(authenticatedUser.getUserEmail())) {
+            mav = new ModelAndView("update");
+            mav.addObject("course", course);
         }
-        return mav.addObject("user", authenticatedUser.getUserEmail());
+        return mav;
     }
 
     @RequestMapping(value = "/courses/{courseId}/update", method = RequestMethod.POST)
     public void updateCourse(final HttpServletResponse resp,
             @ModelAttribute CourseForm courseForm) throws IOException {
 
-        if (ifCourseExist(courseForm.getCourseId())) {
-            Course course = courseService.getById(Integer.parseInt(courseForm.getCourseId()));
-            course.setName(courseForm.getName());
-            course.setDescription(courseForm.getDescription());
-            course.setLinks(courseForm.getLinks());
-            courseService.update(course);
+        Course course = getCourse(courseForm.getCourseId());
+        course.setName(courseForm.getName());
+        course.setDescription(courseForm.getDescription());
+        course.setLinks(courseForm.getLinks());
+        courseService.update(course);
 
-            resp.sendRedirect("/courses");
+        resp.sendRedirect("/courses");
+    }
+
+    @RequestMapping(value = "/courses/{courseId}/subscribe", method = RequestMethod.GET)
+    public ModelAndView printForSubscribeCourse(@PathVariable(COURSEID) String courseId,
+            @ModelAttribute("user") AuthenticatedUser authenticatedUser) {
+        if (!"".equals(authenticatedUser.getUserEmail())) {
+            ModelAndView mav = new ModelAndView("subscribe");
+            mav.addObject("course", getCourse(courseId));
+            return mav;
         } else {
-            resp.sendRedirect("/troublePage");
+            return new ModelAndView("403");
         }
+    }
+
+    @RequestMapping(value = "/courses/{courseId}/subscribe", method = RequestMethod.POST)
+    public void subscribeOnCourse(final HttpServletResponse resp,
+            @PathVariable(COURSEID) String courseId) throws IOException {
+        courseService.addSubscriber(Integer.parseInt(courseId),
+                userService.getUserByEmail(authenticatedUser.getUserEmail()));
+        resp.sendRedirect("/courses");
+    }
+
+    @RequestMapping(value = "/courses/{courseId}/attend", method = RequestMethod.GET)
+    public ModelAndView printAttendess(@PathVariable(COURSEID) String courseId,
+            @ModelAttribute("user") AuthenticatedUser authenticatedUser) {
+        ModelAndView mav;
+        Course course = getCourse(courseId);
+        String username = authenticatedUser.getUserEmail();
+
+        if (course.isSubscribed(userService.getUserByEmail(username))) {
+            mav = new ModelAndView("attend");
+            mav.addObject("course", course);
+        } else {
+            mav = new ModelAndView("403");
+        }
+        return mav;
+    }
+
+    @RequestMapping(value = "/courses/{courseId}/attend", method = RequestMethod.POST)
+    public void attendOnCourse(final HttpServletResponse resp,
+            @PathVariable(COURSEID) int courseId) throws IOException {
+        courseService.addAttender(courseId,
+                userService.getUserByEmail(authenticatedUser.getUserEmail()));
+        resp.sendRedirect("/courses");
+    }
+
+    @RequestMapping(value = "/courses/{courseId}/evaluate", method = RequestMethod.GET)
+    public ModelAndView evaluate(@PathVariable(COURSEID) String courseId,
+            @ModelAttribute("user") AuthenticatedUser authenticatedUser) {
+        ModelAndView mav;
+        Course course = getCourse(courseId);
+        User user = userService.getUserByEmail(authenticatedUser.getUserEmail());
+
+        if ((course.isAttended(user)) && (!course.hasGrade(user))) {
+            mav = new ModelAndView("evaluate");
+            mav.addObject("course", course);
+        } else {
+            mav = new ModelAndView("403");
+        }
+        return mav;
+    }
+
+    private static final Logger LOG = LoggerFactory.getLogger(CoursesController.class);
+
+    @RequestMapping(value = "/courses/{courseId}/evaluate", method = RequestMethod.POST)
+    public void evaluateCourse(final HttpServletRequest req,
+            final HttpServletResponse resp, @PathVariable(COURSEID) String courseId) throws IOException {
+        try {
+            int grade = Integer.parseInt(req.getParameter("grade"));
+            Course course = getCourse(courseId);
+            if ((grade >= 1) && (grade <= 5)) {
+                User user = userService.getUserByEmail(authenticatedUser.getUserEmail());
+                evaluateService.setGrade(course, user, grade);
+            } else {
+                LOG.warn("Incorect grade value: ");
+            }
+        } catch (NumberFormatException nfe) {
+            throw new IdParsingException("Cannot parse to int grade: " + req.getParameter("grade"), nfe);
+        }
+        resp.sendRedirect("/courses");
+    }
+
+    @RequestMapping(value = {"/courses/{courseId}/participants"}, method = RequestMethod.GET)
+    public ModelAndView participants(@PathVariable(COURSEID) String courseId,
+            @ModelAttribute("user") AuthenticatedUser authenticatedUser) {
+        ModelAndView mav = new ModelAndView("participants");
+        mav.addObject("course", getCourse(courseId));
+        return mav;
     }
 }

@@ -4,6 +4,7 @@ import com.epam.tc.model.Course;
 import com.epam.tc.model.User;
 import com.epam.tc.model.UserRole;
 import com.epam.tc.service.course.CourseService;
+import com.epam.tc.service.evaluate.EvaluateService;
 import com.epam.tc.service.user.UserService;
 import com.epam.tc.service.userRole.UserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,16 +17,18 @@ public class DefaultValuePopulator {
     private UserService userService;
     @Autowired
     private UserRoleService userRoleService;
+    @Autowired
+    private EvaluateService evaluateService;
 
     public void initDBvaluesIsEmpty() {
-        if (courseService.getAll().isEmpty()) {
-            setDefaultCourses();
-        }
         if (userRoleService.getAll().isEmpty()) {
             setDefaultUserRoles();
         }
         if (userService.getAll().isEmpty()) {
-            SetDefaultUsers();
+            setDefaultUsers();
+        }
+        if (courseService.getAll().isEmpty()) {
+            setDefaultCourses();
         }
     }
 
@@ -33,28 +36,46 @@ public class DefaultValuePopulator {
         Course course;
 
         course = new Course("Draft");
+        course.setOwner(userService.getUserByLogin("lecturer-a"));
         courseService.create(course);
 
         course = new Course("Proposal");
+        course.setOwner(userService.getUserByLogin("lecturer-a"));
         courseService.create(course);
 
         course = new Course("Rejected");
+        course.setOwner(userService.getUserByLogin("lecturer-a"));
         courseService.create(course);
 
         course = new Course("New");
+        course.setOwner(userService.getUserByLogin("lecturer-a"));
         courseService.create(course);
+        courseService.addSubscriber(course.getId(), userService.getUserByLogin("user-a"));
 
         course = new Course("Open");
+        course.setOwner(userService.getUserByLogin("lecturer-a"));
         courseService.create(course);
+        courseService.addSubscriber(course.getId(), userService.getUserByLogin("user-b"));
+        courseService.addAttender(course.getId(), userService.getUserByLogin("user-a"));
 
         course = new Course("Ready");
+        course.setOwner(userService.getUserByLogin("lecturer-a"));
         courseService.create(course);
+        courseService.addAttender(course.getId(), userService.getUserByLogin("user-a"));
+        courseService.addAttender(course.getId(), userService.getUserByLogin("user-b"));
 
         course = new Course("In Progress");
+        course.setOwner(userService.getUserByLogin("lecturer-a"));
         courseService.create(course);
+        courseService.addAttender(course.getId(), userService.getUserByLogin("user-a"));
+        courseService.addAttender(course.getId(), userService.getUserByLogin("user-b"));
 
         course = new Course("Finished");
+        course.setOwner(userService.getUserByLogin("lecturer-a"));
         courseService.create(course);
+        courseService.addAttender(course.getId(), userService.getUserByLogin("user-a"));
+        courseService.addAttender(course.getId(), userService.getUserByLogin("user-b"));
+        evaluateService.setGrade(course, userService.getUserByLogin("user-a"), 3);
     }
 
     private void setDefaultUserRoles() {
@@ -73,7 +94,7 @@ public class DefaultValuePopulator {
         userRoleService.create(userRole);
     }
 
-    private void SetDefaultUsers() {
+    private void setDefaultUsers() {
         User user;
 
         user = new User("km@tc.edu", "km", "123", userRoleService.getURbyName("Knowledge Manager"));

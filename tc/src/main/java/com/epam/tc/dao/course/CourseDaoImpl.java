@@ -22,7 +22,7 @@ public class CourseDaoImpl extends CRUDdaoImpl<Course> implements CourseDao {
     }
 
     @Override
-    public Course getByName(String name) {  
+    public Course getByName(String name) {
         try {
             return entityManager.createQuery("select c from Course c where c.name = :name", Course.class)
                     .setParameter("name", name)
