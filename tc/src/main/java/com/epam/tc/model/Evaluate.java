@@ -33,6 +33,11 @@ public class Evaluate implements Serializable {
     public Evaluate() {
     }
 
+    public Evaluate(User user, Course course) {
+        this.user = user;
+        this.course = course;
+    }
+
     public Evaluate(User user, Course course, Integer grade) {
         this.user = user;
         this.course = course;

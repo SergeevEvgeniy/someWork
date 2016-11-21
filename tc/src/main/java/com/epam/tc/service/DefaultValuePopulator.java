@@ -4,6 +4,7 @@ import com.epam.tc.model.Course;
 import com.epam.tc.model.User;
 import com.epam.tc.model.UserRole;
 import com.epam.tc.service.course.CourseService;
+import com.epam.tc.service.evaluate.EvaluateService;
 import com.epam.tc.service.user.UserService;
 import com.epam.tc.service.userRole.UserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ public class DefaultValuePopulator {
     private UserService userService;
     @Autowired
     private UserRoleService userRoleService;
+    @Autowired
+    private EvaluateService evaluateService;
 
     public void initDBvaluesIsEmpty() {
         if (userRoleService.getAll().isEmpty()) {
@@ -72,8 +75,9 @@ public class DefaultValuePopulator {
         courseService.create(course);
         courseService.addAttender(course.getId(), userService.getUserByLogin("user-a"));
         courseService.addAttender(course.getId(), userService.getUserByLogin("user-b"));
+        evaluateService.setGrade(course, userService.getUserByLogin("user-a"), 3);
     }
-        
+
     private void setDefaultUserRoles() {
         UserRole userRole;
 

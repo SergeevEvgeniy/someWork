@@ -49,23 +49,24 @@ public class Course implements Serializable {
         return attenders.stream().anyMatch((attender) -> (attender.getUser() == user));
     }
 
-    public boolean isHaveGrade(User user) {
+    public boolean hasGrade(User user) {
         return attenders.stream().anyMatch((attender)
                 -> ((attender.getUser() == user) && (attender.getGrade() != null)));
     }
 
     public double getAverageGrade() {
-        int ch = 0, sum = 0;
+        double count = 0;
+        double sum = 0;
         for (Evaluate attender : attenders) {
             if (attender.getGrade() != null) {
                 sum += attender.getGrade();
-                ch++;
+                count++;
             }
         }
-        if (ch == 0) {
+        if (count == 0) {
             return 0;
         } else {
-            return sum / ch;
+            return sum / count;
         }
     }
 
@@ -90,7 +91,7 @@ public class Course implements Serializable {
     }
 
     public void addAttender(User attender) {
-        Evaluate evaluate = new Evaluate(attender, this, null);
+        Evaluate evaluate = new Evaluate(attender, this);
         this.attenders.add(evaluate);
     }
 

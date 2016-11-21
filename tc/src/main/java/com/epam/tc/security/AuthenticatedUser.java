@@ -17,7 +17,7 @@ public class AuthenticatedUser {
             return ud.getUsername();
         } catch (ClassCastException ex) {
             LOG.warn("Not authenticated  user");
+            return "surfer";
         }
-        return "";
     }
 }

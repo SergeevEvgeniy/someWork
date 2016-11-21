@@ -29,19 +29,19 @@
                     <div class="control-label">Links</div>
                     <div id="linksField" class="controls text" th:text="${course.links}"></div>
                 </div>
-                <div class="control-group" th:if="${course.getSubscribers().size() &gt; 0}">
+                <div class="control-group" th:if="${course.subscribers.size() &gt; 0}">
                     <div class="control-label">Subscribers</div>
                     <div id="subscribersField" class="controls text"> 
-                        <a th:href="@{'/courses/'+${course.getId()}+ '/participants'}"
-                           th:text="${course.getSubscribers().size()}">
+                        <a th:href="@{'/courses/'+${course.id}+ '/participants'}"
+                           th:text="${course.subscribers.size()}">
                         </a>
                     </div>
                 </div>
-                <div class="control-group" th:if="${course.getAttenders().size() &gt; 0}">
+                <div class="control-group" th:if="${course.attenders.size() &gt; 0}">
                     <div class="control-label">Attendee</div>
                     <div id="attendeeField" class="controls text"> 
-                        <a th:href="@{'/courses/'+${course.getId()}+ '/participants'}"
-                           th:text="${course.getAttenders().size()}">
+                        <a th:href="@{'/courses/'+${course.id}+ '/participants'}"
+                           th:text="${course.attenders.size()}">
                         </a>
                     </div>
                 </div>
@@ -54,6 +54,5 @@
                 <a class="btn" href="/courses">Back</a>
             </div> 
         </div> 
-    </div>
-</body>
+    </body>
 </html>
