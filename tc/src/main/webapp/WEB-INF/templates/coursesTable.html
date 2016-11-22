@@ -3,6 +3,7 @@
         <tr>
             <th class="span1">Id</th>
             <th>Course</th>
+            <th sec:authorize="hasAuthority('User')" class="span3">Category</th>
             <th sec:authorize="hasAuthority('User')" class="span1">S/A</th>
             <th sec:authorize="hasAuthority('User')" class="span1">Grade</th>
             <th class="span2">Action</th>
@@ -13,6 +14,9 @@
             <td th:text="${course.id}">Id</td>
             <td>
                 <a th:href="@{/courses/} + ${course.id}" th:text="${course.name}">Course </a>
+            </td>
+            <td sec:authorize="hasAuthority('User')">
+                <div th:text="${course.category.name}"></div>
             </td>
             <td sec:authorize="hasAuthority('Lector')">
                 <a class="btn btn-mini" th:href="@{/courses/} + ${course.id}+ @{/update}">Update</a>
