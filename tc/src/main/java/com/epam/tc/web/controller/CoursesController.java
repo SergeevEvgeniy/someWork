@@ -26,7 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class CoursesController {
-    
+
     @Autowired
     private CourseService courseService;
     @Autowired
@@ -37,16 +37,16 @@ public class CoursesController {
     private EvaluateService evaluateService;
     @Autowired
     private CategoryService categoryService;
-    
+
     private static final String COURSEID = "courseId";
-    
+
     @RequestMapping(value = {"/courses", "/*"}, method = RequestMethod.GET)
     public Model courses(Model model, @ModelAttribute("user") AuthenticatedUser authenticatedUser) {
         model.addAttribute("courses", courseService.getAll());
         model.addAttribute("person", userService.getUserByEmail(authenticatedUser.getUserEmail()));
         return model;
     }
-    
+
     private Course getCourse(String courseId) {
         try {
             int id = Integer.parseInt(courseId);
@@ -59,26 +59,26 @@ public class CoursesController {
             throw new IdParsingException("Cannot parse to int courseId: " + courseId, nfe);
         }
     }
-    
+
     @RequestMapping(value = {"/courses/{courseId}"}, method = RequestMethod.GET)
     public ModelAndView details(@PathVariable(COURSEID) String courseId,
             @ModelAttribute("user") AuthenticatedUser authenticatedUser) {
         ModelAndView mav;
         mav = new ModelAndView("courseDetails");
         mav.addObject("course", getCourse(courseId));
-        
+
         return mav;
     }
-    
+
     @RequestMapping(value = "/courses/create", method = RequestMethod.GET)
     public ModelAndView createCourse(@ModelAttribute("user") AuthenticatedUser authenticatedUser) {
         return new ModelAndView("create").addObject("categories", categoryService.getAll());
     }
-    
+
     @RequestMapping(value = "/courses/create", method = RequestMethod.POST)
     public void createCourse(final HttpServletRequest req,
             final HttpServletResponse resp) throws IOException {
-        
+
         Course course = new Course(
                 req.getParameter("titleField"),
                 req.getParameter("descriptionField"),
@@ -88,7 +88,7 @@ public class CoursesController {
         courseService.create(course);
         resp.sendRedirect("/courses");
     }
-    
+
     @RequestMapping(value = "/courses/{courseId}/update", method = RequestMethod.GET)
     public ModelAndView printForUpdateCourse(@PathVariable(COURSEID) String courseId,
             @ModelAttribute("user") AuthenticatedUser authenticatedUser) {
@@ -99,22 +99,23 @@ public class CoursesController {
             mav = new ModelAndView("update");
             mav.addObject("course", course);
         }
-        return mav;
+        return mav.addObject("categories", categoryService.getAll());
     }
-    
+
     @RequestMapping(value = "/courses/{courseId}/update", method = RequestMethod.POST)
-    public void updateCourse(final HttpServletResponse resp,
+    public void updateCourse(final HttpServletRequest req, final HttpServletResponse resp,
             @ModelAttribute CourseForm courseForm) throws IOException {
-        
+
         Course course = getCourse(courseForm.getCourseId());
         course.setName(courseForm.getName());
         course.setDescription(courseForm.getDescription());
         course.setLinks(courseForm.getLinks());
+        course.setCategory(categoryService.getByName(req.getParameter("categoryOption")));
         courseService.update(course);
-        
+
         resp.sendRedirect("/courses");
     }
-    
+
     @RequestMapping(value = "/courses/{courseId}/subscribe", method = RequestMethod.GET)
     public ModelAndView printForSubscribeCourse(@PathVariable(COURSEID) String courseId,
             @ModelAttribute("user") AuthenticatedUser authenticatedUser) {
@@ -126,7 +127,7 @@ public class CoursesController {
             return new ModelAndView("403");
         }
     }
-    
+
     @RequestMapping(value = "/courses/{courseId}/subscribe", method = RequestMethod.POST)
     public void subscribeOnCourse(final HttpServletResponse resp,
             @PathVariable(COURSEID) String courseId) throws IOException {
@@ -134,14 +135,14 @@ public class CoursesController {
                 userService.getUserByEmail(authenticatedUser.getUserEmail()));
         resp.sendRedirect("/courses");
     }
-    
+
     @RequestMapping(value = "/courses/{courseId}/attend", method = RequestMethod.GET)
     public ModelAndView printAttendess(@PathVariable(COURSEID) String courseId,
             @ModelAttribute("user") AuthenticatedUser authenticatedUser) {
         ModelAndView mav;
         Course course = getCourse(courseId);
         String username = authenticatedUser.getUserEmail();
-        
+
         if (course.isSubscribed(userService.getUserByEmail(username))) {
             mav = new ModelAndView("attend");
             mav.addObject("course", course);
@@ -150,7 +151,7 @@ public class CoursesController {
         }
         return mav;
     }
-    
+
     @RequestMapping(value = "/courses/{courseId}/attend", method = RequestMethod.POST)
     public void attendOnCourse(final HttpServletResponse resp,
             @PathVariable(COURSEID) int courseId) throws IOException {
@@ -158,14 +159,14 @@ public class CoursesController {
                 userService.getUserByEmail(authenticatedUser.getUserEmail()));
         resp.sendRedirect("/courses");
     }
-    
+
     @RequestMapping(value = "/courses/{courseId}/evaluate", method = RequestMethod.GET)
     public ModelAndView evaluate(@PathVariable(COURSEID) String courseId,
             @ModelAttribute("user") AuthenticatedUser authenticatedUser) {
         ModelAndView mav;
         Course course = getCourse(courseId);
         User user = userService.getUserByEmail(authenticatedUser.getUserEmail());
-        
+
         if ((course.isAttended(user)) && (!course.hasGrade(user))) {
             mav = new ModelAndView("evaluate");
             mav.addObject("course", course);
@@ -174,9 +175,9 @@ public class CoursesController {
         }
         return mav;
     }
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(CoursesController.class);
-    
+
     @RequestMapping(value = "/courses/{courseId}/evaluate", method = RequestMethod.POST)
     public void evaluateCourse(final HttpServletRequest req, final HttpServletResponse resp,
             @PathVariable(COURSEID) String courseId) throws IOException {
@@ -194,7 +195,7 @@ public class CoursesController {
         }
         resp.sendRedirect("/courses");
     }
-    
+
     @RequestMapping(value = {"/courses/{courseId}/participants"}, method = RequestMethod.GET)
     public ModelAndView participants(@PathVariable(COURSEID) String courseId,
             @ModelAttribute("user") AuthenticatedUser authenticatedUser) {
@@ -202,7 +203,7 @@ public class CoursesController {
         mav.addObject("course", getCourse(courseId));
         return mav;
     }
-    
+
     @RequestMapping(value = {"/mycourses"}, method = RequestMethod.GET)
     public ModelAndView myCourses(@ModelAttribute("user") AuthenticatedUser authenticatedUser) {
         ModelAndView mav = new ModelAndView("myCourses");
