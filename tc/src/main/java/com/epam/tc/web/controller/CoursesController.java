@@ -11,6 +11,7 @@ import com.epam.tc.service.evaluate.EvaluateService;
 import com.epam.tc.service.user.UserService;
 import com.epam.tc.web.forms.CourseForm;
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -39,11 +40,15 @@ public class CoursesController {
     private CategoryService categoryService;
 
     private static final String COURSEID = "courseId";
+    private static final String PATH = "path";
 
     @RequestMapping(value = {"/courses", "/*"}, method = RequestMethod.GET)
     public Model courses(Model model, @ModelAttribute("user") AuthenticatedUser authenticatedUser) {
-        model.addAttribute("courses", courseService.getAll());
+        List<Course> courses = courseService.getAll();
+        model.addAttribute("courses", courseService.filteredCourseList(courses, filteringCondition));
         model.addAttribute("person", userService.getUserByEmail(authenticatedUser.getUserEmail()));
+        model.addAttribute("categories", categoryService.getAll());
+        model.addAttribute(PATH, "courses");
         return model;
     }
 
@@ -208,7 +213,18 @@ public class CoursesController {
     public ModelAndView myCourses(@ModelAttribute("user") AuthenticatedUser authenticatedUser) {
         ModelAndView mav = new ModelAndView("myCourses");
         User user = userService.getUserByEmail(authenticatedUser.getUserEmail());
-        mav.addObject("courses", courseService.getUserCoursesList(user));
+        mav.addObject("courses", courseService.filteredCourseList(courseService.getUserCoursesList(user), filteringCondition));
+        mav.addObject("categories", categoryService.getAll());
+        mav.addObject(PATH, "mycourses");
         return mav;
+    }
+
+    String filteringCondition = "All";
+
+    @RequestMapping(value = {"/filter/{path}"}, method = RequestMethod.GET)
+    public void filter(final HttpServletRequest req, final HttpServletResponse resp,
+            @PathVariable(PATH) String path) throws IOException {
+        filteringCondition = req.getParameter("filterOption");
+        resp.sendRedirect("/" + path);
     }
 }

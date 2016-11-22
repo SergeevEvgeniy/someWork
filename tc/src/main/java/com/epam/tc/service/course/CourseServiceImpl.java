@@ -67,4 +67,16 @@ public class CourseServiceImpl implements CourseService {
                 });
         return resultList;
     }
+
+    @Override
+    public List<Course> filteredCourseList(List<Course> courses, String filterCondition) {
+        if (!"All".equals(filterCondition)) {
+            for (Course course : courses) {
+                if (!course.getCategory().getName().equals(filterCondition)) {
+                    courses.remove(course);
+                }
+            }
+        }
+        return courses;
+    }
 }

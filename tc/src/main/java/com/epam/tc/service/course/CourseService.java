@@ -21,4 +21,6 @@ public interface CourseService {
     void addSubscriber(int courseId, User subscriber);
 
     void addAttender(int courseId, User attender);
+
+    List<Course> filteredCourseList(List<Course> courses, String filterCondition);
 }
