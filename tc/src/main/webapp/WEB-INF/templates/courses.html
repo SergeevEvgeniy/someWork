@@ -12,7 +12,7 @@
                     <script th:replace="logoutHeader"></script>
                 </h1>
             </header>
-            <div class="courses-top-control">
+            <div class="courses-top-control" sec:authorize="hasAuthority('User')">
                 <a class="btn" href="/mycourses">My Courses</a>
             </div>
             <div class="courses-top-control" sec:authorize="hasAuthority('Lector')">
