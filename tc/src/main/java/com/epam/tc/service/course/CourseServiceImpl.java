@@ -70,13 +70,15 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<Course> filteredCourseList(List<Course> courses, String filterCondition) {
+        List<Course> resultList = new ArrayList<>();
         if (!"All".equals(filterCondition)) {
-            for (Course course : courses) {
-                if (!course.getCategory().getName().equals(filterCondition)) {
-                    courses.remove(course);
-                }
-            }
+            courses.stream().filter((course)
+                    -> (course.getCategory().getName().equals(filterCondition))).forEach((course) -> {
+                resultList.add(course);
+            });
+            return resultList;
+        } else {
+            return courses;
         }
-        return courses;
     }
 }

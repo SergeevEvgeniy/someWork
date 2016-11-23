@@ -1,7 +1,7 @@
 <div class="search-box">
-    <form class="form-search" th:action="@{/filter/} + ${path}" method="get" >
+    <form class="form-search" th:action="@{/} + ${path}" method="get" >
         <select class="span3" name="filterOption">
-            <option th:value="All" th:text="All"></option>
+            <option th:selected="All" th:text="All"></option>
             <option th:each="category : ${categories}"
                     th:text="${category.name}"
                     th:selected="${categories.contains(category.name)}">Options</option>

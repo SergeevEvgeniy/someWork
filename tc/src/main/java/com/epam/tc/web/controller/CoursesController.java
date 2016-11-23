@@ -41,10 +41,14 @@ public class CoursesController {
 
     private static final String COURSEID = "courseId";
     private static final String PATH = "path";
+    private String filteringCondition;
 
     @RequestMapping(value = {"/courses", "/*"}, method = RequestMethod.GET)
-    public Model courses(Model model, @ModelAttribute("user") AuthenticatedUser authenticatedUser) {
+    public Model courses(final HttpServletRequest req, Model model,
+            @ModelAttribute("user") AuthenticatedUser authenticatedUser) {
         List<Course> courses = courseService.getAll();
+        filteringCondition = req.getParameter("filterOption") != null
+                ? req.getParameter("filterOption") : "All";
         model.addAttribute("courses", courseService.filteredCourseList(courses, filteringCondition));
         model.addAttribute("person", userService.getUserByEmail(authenticatedUser.getUserEmail()));
         model.addAttribute("categories", categoryService.getAll());
@@ -210,21 +214,15 @@ public class CoursesController {
     }
 
     @RequestMapping(value = {"/mycourses"}, method = RequestMethod.GET)
-    public ModelAndView myCourses(@ModelAttribute("user") AuthenticatedUser authenticatedUser) {
+    public ModelAndView myCourses(final HttpServletRequest req,
+            @ModelAttribute("user") AuthenticatedUser authenticatedUser) {
         ModelAndView mav = new ModelAndView("myCourses");
         User user = userService.getUserByEmail(authenticatedUser.getUserEmail());
+        filteringCondition = req.getParameter("filterOption") != null
+                ? req.getParameter("filterOption") : "All";
         mav.addObject("courses", courseService.filteredCourseList(courseService.getUserCoursesList(user), filteringCondition));
         mav.addObject("categories", categoryService.getAll());
         mav.addObject(PATH, "mycourses");
         return mav;
-    }
-
-    String filteringCondition = "All";
-
-    @RequestMapping(value = {"/filter/{path}"}, method = RequestMethod.GET)
-    public void filter(final HttpServletRequest req, final HttpServletResponse resp,
-            @PathVariable(PATH) String path) throws IOException {
-        filteringCondition = req.getParameter("filterOption");
-        resp.sendRedirect("/" + path);
     }
 }
