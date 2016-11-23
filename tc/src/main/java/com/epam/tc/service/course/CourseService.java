@@ -12,7 +12,7 @@ public interface CourseService {
 
     List<Course> getAll();
 
-    List<Course> getUserCoursesList(User user);
+    List<Course> getUserCourses(User user);
 
     Course getById(int id);
 
@@ -22,5 +22,5 @@ public interface CourseService {
 
     void addAttender(int courseId, User attender);
 
-    List<Course> filteredCourseList(List<Course> courses, String filterCondition);
+    List<Course> filterCourses(List<Course> courses, String filterCondition);
 }

@@ -49,7 +49,7 @@ public class CoursesController {
         List<Course> courses = courseService.getAll();
         filteringCondition = req.getParameter("filterOption") != null
                 ? req.getParameter("filterOption") : "All";
-        model.addAttribute("courses", courseService.filteredCourseList(courses, filteringCondition));
+        model.addAttribute("courses", courseService.filterCourses(courses, filteringCondition));
         model.addAttribute("person", userService.getUserByEmail(authenticatedUser.getUserEmail()));
         model.addAttribute("categories", categoryService.getAll());
         model.addAttribute(PATH, "courses");
@@ -220,7 +220,7 @@ public class CoursesController {
         User user = userService.getUserByEmail(authenticatedUser.getUserEmail());
         filteringCondition = req.getParameter("filterOption") != null
                 ? req.getParameter("filterOption") : "All";
-        mav.addObject("courses", courseService.filteredCourseList(courseService.getUserCoursesList(user), filteringCondition));
+        mav.addObject("courses", courseService.filterCourses(courseService.getUserCourses(user), filteringCondition));
         mav.addObject("categories", categoryService.getAll());
         mav.addObject(PATH, "mycourses");
         return mav;

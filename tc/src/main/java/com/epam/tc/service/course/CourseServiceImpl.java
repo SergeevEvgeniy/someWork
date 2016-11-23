@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import com.epam.tc.dao.course.CourseDao;
 import com.epam.tc.model.User;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.stream.Collectors;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -57,7 +59,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<Course> getUserCoursesList(User user) {
+    public List<Course> getUserCourses(User user) {
         List<Course> courses = getAll();
         List<Course> resultList = new ArrayList<>();
         courses.stream().filter((course)
@@ -69,13 +71,12 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<Course> filteredCourseList(List<Course> courses, String filterCondition) {
-        List<Course> resultList = new ArrayList<>();
+    public List<Course> filterCourses(List<Course> courses, String filterCondition) {
+        List<Course> resultList;
         if (!"All".equals(filterCondition)) {
-            courses.stream().filter((course)
-                    -> (course.getCategory().getName().equals(filterCondition))).forEach((course) -> {
-                resultList.add(course);
-            });
+            resultList = courses.stream().filter((course)
+                    -> (course.getCategory().getName().equals(filterCondition)))
+                    .collect(Collectors.toList());
             return resultList;
         } else {
             return courses;

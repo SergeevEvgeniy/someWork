@@ -17,7 +17,8 @@ public class EvaluateServiceImpl implements EvaluateService {
 
     @Override
     public void setGrade(Course course, User attender, int grade) {
-        Evaluate evaluate = new Evaluate(attender, course, grade);
+        Evaluate evaluate = evaluateDao.getByCourseAndUser(course, attender);
+        evaluate.setGrade(grade);
         evaluateDao.update(evaluate);
     }
 }

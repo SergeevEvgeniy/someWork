@@ -1,4 +1,4 @@
-package com.epam.tc.service;
+package com.epam.tc.init;
 
 import com.epam.tc.model.Category;
 import com.epam.tc.model.Course;
@@ -11,7 +11,7 @@ import com.epam.tc.service.user.UserService;
 import com.epam.tc.service.userRole.UserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class DefaultValuePopulator {
+public class SampleDataPopulator {
 
     @Autowired
     private CourseService courseService;
