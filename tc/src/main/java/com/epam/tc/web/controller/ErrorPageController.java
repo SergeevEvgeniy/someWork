@@ -1,6 +1,6 @@
 package com.epam.tc.web.controller;
 
-import com.epam.tc.security.AuthenticatedUser;
+import com.epam.tc.service.user.UserService;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class ErrorPageController implements ErrorController {
 
     @Autowired
-    private AuthenticatedUser authenticatedUser;
+    private UserService userService;
 
     private static final String PATH = "/error";
 
@@ -31,6 +31,6 @@ public class ErrorPageController implements ErrorController {
 
     @RequestMapping(value = "/403", method = RequestMethod.GET)
     public Model accessDenied(Model model) {
-        return model.addAttribute("user", authenticatedUser.getUserEmail());
+        return model.addAttribute("user", userService.getUserEmail());
     }
 }

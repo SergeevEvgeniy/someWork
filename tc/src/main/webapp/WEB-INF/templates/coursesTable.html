@@ -42,12 +42,12 @@
             </td>
             <td sec:authorize="hasAuthority('User')">
                 <a class="btn btn-mini" 
-                   th:if="${not course.isSubscribed(person) and  not course.isAttended(person)}"
+                   th:if="${person.canSubscribe(course)}"
                    th:href="'/courses/'+${course.getId()}+ '/subscribe'">Subscribe</a>
                 <a class="btn btn-mini"
-                   th:if="${course.isSubscribed(person) and  not course.isAttended(person)}"
+                   th:if="${person.canAttend(course)}"
                    th:href="'/courses/'+${course.getId()}+ '/attend'">Attend</a>
-                <a class="btn btn-mini" th:if="${course.isAttended(person) and  not course.hasGrade(person)}"
+                <a class="btn btn-mini" th:if="${person.canEvaluate(course)}"
                    th:href="'/courses/'+${course.getId()}+ '/evaluate'">Evaluate</a>
             </td>
         </tr>

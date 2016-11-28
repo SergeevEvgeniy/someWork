@@ -2,6 +2,8 @@ package com.epam.tc.dao.course;
 
 import com.epam.tc.dao.CRUDdaoImpl;
 import com.epam.tc.model.Course;
+import com.epam.tc.model.User;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -20,7 +22,7 @@ public class CourseDaoImpl extends CRUDdaoImpl<Course> implements CourseDao {
     public CourseDaoImpl() {
         super(Course.class);
     }
-
+ 
     @Override
     public Course getByName(String name) {
         try {
@@ -32,5 +34,11 @@ public class CourseDaoImpl extends CRUDdaoImpl<Course> implements CourseDao {
             LOG.debug("No course found ", e);
             return null;
         }
+    }
+
+    @Override
+    public List<Course> getUserCourses(User user) {
+        
+        return null;
     }
 }

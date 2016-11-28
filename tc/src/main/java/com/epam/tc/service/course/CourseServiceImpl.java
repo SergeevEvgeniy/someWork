@@ -68,6 +68,7 @@ public class CourseServiceImpl implements CourseService {
                     resultList.add(course);
                 });
         return resultList;
+        //return courseDao.getUserCourses(user);
     }
 
     @Override
