@@ -41,6 +41,10 @@ public class Course implements Serializable {
     private User owner;
 
     @ManyToOne
+    @JoinColumn(name = "StatusId")
+    private Status status;
+
+    @ManyToOne
     @JoinColumn(name = "CategoryId")
     private Category category;
 
@@ -50,6 +54,14 @@ public class Course implements Serializable {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     public boolean isSubscribed(User user) {

@@ -22,4 +22,12 @@ public class UserDTO {
     public boolean canSubscribe(Course course) {
         return !course.isSubscribed(user) && !course.isAttended(user);
     }
+
+    public boolean canSee(Course course) {
+        if (course.getStatus().getName().equals("Draft")) {
+            return course.getOwner().equals(user);
+        } else {
+            return true;
+        }
+    }
 }

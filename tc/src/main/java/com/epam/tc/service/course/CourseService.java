@@ -1,5 +1,6 @@
 package com.epam.tc.service.course;
 
+import com.epam.tc.model.Category;
 import com.epam.tc.model.Course;
 import com.epam.tc.model.User;
 import java.util.List;
@@ -10,9 +11,9 @@ public interface CourseService {
 
     void delete(Course course);
 
-    List<Course> getAll();
+    List<Course> getAll(Category filterCategory);
 
-    List<Course> getUserCourses(User user);
+    List<Course> getUserCourses(User user, Category category);
 
     Course getById(int id);
 
@@ -21,6 +22,4 @@ public interface CourseService {
     void addSubscriber(int courseId, User subscriber);
 
     void addAttender(int courseId, User attender);
-
-    List<Course> filterCourses(List<Course> courses, String filterCondition);
 }

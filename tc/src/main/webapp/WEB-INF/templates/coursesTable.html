@@ -1,7 +1,6 @@
 <div class="search-box" sec:authorize="hasAuthority('User')">
     <form class="form-search" th:action="@{/} + ${path}" method="get" >
         <select class="span3" name="filterOption">
-            <option th:selected="All" th:text="All"></option>
             <option th:each="category : ${categories}"
                     th:text="${category.name}"
                     th:selected="${categories.contains(category.name)}">Options</option>
@@ -21,10 +20,11 @@
         </tr>
     </thead>
     <tbody>
-        <tr th:each="course: ${courses}">
+        <tr th:each="course: ${courses}" th:if="${person.canSee(course)}">
             <td th:text="${course.id}">Id</td>
             <td>
                 <a th:href="@{/courses/} + ${course.id}" th:text="${course.name}">Course </a>
+                <span class="label" th:if="(${course.status.name}==Draft)">Draft</span>
             </td>
             <td sec:authorize="hasAuthority('User')">
                 <div th:text="${course.category.name}"></div>

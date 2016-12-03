@@ -5,10 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.epam.tc.dao.course.CourseDao;
+import com.epam.tc.model.Category;
 import com.epam.tc.model.User;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.stream.Collectors;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -24,8 +22,12 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<Course> getAll() {
-        return courseDao.getAll();
+    public List<Course> getAll(Category filterCategory) {
+        if ((filterCategory.getName().equals("All"))) {
+            return courseDao.getAll();
+        } else {
+            return courseDao.getByCategory(filterCategory);
+        }
     }
 
     @Override
@@ -59,20 +61,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<Course> getUserCourses(User user) {
-        return courseDao.getUserCourses(user);
-    }
-
-    @Override
-    public List<Course> filterCourses(List<Course> courses, String filterCondition) {
-        List<Course> resultList;
-        if (!"All".equals(filterCondition)) {
-            resultList = courses.stream().filter((course)
-                    -> (course.getCategory().getName().equals(filterCondition)))
-                    .collect(Collectors.toList());
-            return resultList;
-        } else {
-            return courses;
-        }
+    public List<Course> getUserCourses(User user, Category category) {
+        return courseDao.getUserCourses(user, category);
     }
 }

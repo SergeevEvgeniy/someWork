@@ -32,6 +32,17 @@
                         </div>
                     </div>
                     <div class="control-group">
+                        <label class="control-label">Status</label>
+                        <div class="controls">
+                            <select id="statusField" class="span5" name="statusOption" required>
+                                <option></option>
+                                <option th:each="status : ${statuses}"
+                                        th:text="${status.name}"
+                                        th:selected="${statuses.contains(status.name)}">Options</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
                         <label class="control-label">Description</label>
                         <div class="controls">
                             <textarea name="descriptionField" class="span5" rows="3" required></textarea>

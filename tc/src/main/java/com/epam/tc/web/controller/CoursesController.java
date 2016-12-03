@@ -3,15 +3,16 @@ package com.epam.tc.web.controller;
 import com.epam.tc.dto.UserDTO;
 import com.epam.tc.exception.CourseNotFoundException;
 import com.epam.tc.exception.IdParsingException;
+import com.epam.tc.model.Category;
 import com.epam.tc.model.Course;
 import com.epam.tc.model.User;
 import com.epam.tc.service.category.CategoryService;
 import com.epam.tc.service.course.CourseService;
 import com.epam.tc.service.evaluate.EvaluateService;
+import com.epam.tc.service.status.StatusService;
 import com.epam.tc.service.user.UserService;
 import com.epam.tc.web.forms.CourseForm;
 import java.io.IOException;
-import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -36,21 +37,23 @@ public class CoursesController {
     private EvaluateService evaluateService;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private StatusService statusService;
 
     private static final Logger LOG = LoggerFactory.getLogger(CoursesController.class);
 
     private static final String COURSEID = "courseId";
     private static final String PATH = "path";
-    private String filteringCondition;
+    private Category filterCategory;
 
     @RequestMapping(value = {"/courses", "/*"}, method = RequestMethod.GET)
     public Model courses(final HttpServletRequest req, Model model) {
 
-        List<Course> courses = courseService.getAll();
-        filteringCondition = req.getParameter("filterOption") != null
-                ? req.getParameter("filterOption") : "All";
+        filterCategory = req.getParameter("filterOption") != null
+                ? categoryService.getByName(req.getParameter("filterOption"))
+                : categoryService.getByName("All");
 
-        model.addAttribute("courses", courseService.filterCourses(courses, filteringCondition));
+        model.addAttribute("courses", courseService.getAll(filterCategory));
         model.addAttribute("categories", categoryService.getAll());
         model.addAttribute("person", new UserDTO(getCurrentUser()));
         model.addAttribute(PATH, "courses");
@@ -60,15 +63,27 @@ public class CoursesController {
     @RequestMapping(value = {"/courses/{courseId}"}, method = RequestMethod.GET)
     public ModelAndView details(@PathVariable(COURSEID) String courseId) {
         ModelAndView mav;
-        mav = new ModelAndView("courseDetails");
-        mav.addObject("course", getCourse(courseId));
 
-        return mav;
+        if (getCourse(courseId).getStatus().getName().equals("Draft")) {
+            if (getCourse(courseId).getOwner().equals(getCurrentUser())) {
+                mav = new ModelAndView("courseDetails");
+                mav.addObject("course", getCourse(courseId));
+                return mav;
+            } else {
+                return new ModelAndView("403");
+            }
+        } else {
+            mav = new ModelAndView("courseDetails");
+            mav.addObject("course", getCourse(courseId));
+            return mav;
+        }
     }
 
     @RequestMapping(value = "/courses/create", method = RequestMethod.GET)
     public ModelAndView createCourse() {
-        return new ModelAndView("create").addObject("categories", categoryService.getAll());
+        return new ModelAndView("create")
+                .addObject("categories", categoryService.getAll())
+                .addObject("statuses", statusService.getAll());
     }
 
     @RequestMapping(value = "/courses/create", method = RequestMethod.POST)
@@ -81,6 +96,7 @@ public class CoursesController {
                 req.getParameter("linksField"),
                 getCurrentUser());
         course.setCategory(categoryService.getByName(req.getParameter("categoryOption")));
+        course.setStatus(statusService.getByName(req.getParameter("statusOption")));
         courseService.create(course);
         resp.sendRedirect("/courses");
     }
@@ -198,10 +214,13 @@ public class CoursesController {
         ModelAndView mav = new ModelAndView("myCourses");
         User user = getCurrentUser();
         UserDTO userDTO = new UserDTO(user);
-        filteringCondition = req.getParameter("filterOption") != null
-                ? req.getParameter("filterOption") : "All";
+
+        filterCategory = req.getParameter("filterOption") != null
+                ? categoryService.getByName(req.getParameter("filterOption"))
+                : categoryService.getByName("All");
+
         mav.addObject("person", userDTO);
-        mav.addObject("courses", courseService.filterCourses(courseService.getUserCourses(user), filteringCondition));
+        mav.addObject("courses", courseService.getUserCourses(getCurrentUser(), filterCategory));
         mav.addObject("categories", categoryService.getAll());
         mav.addObject(PATH, "mycourses");
         return mav;
@@ -221,7 +240,7 @@ public class CoursesController {
             int id = Integer.parseInt(courseId);
             Course course = courseService.getById(id);
             if (course == null) {
-                throw new CourseNotFoundException("Course with id: " + courseId + "not found");
+                throw new CourseNotFoundException("Course with id: " + courseId + " not found");
             }
             return course;
         } catch (NumberFormatException nfe) {
