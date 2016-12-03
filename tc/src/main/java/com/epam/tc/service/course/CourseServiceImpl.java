@@ -60,15 +60,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public List<Course> getUserCourses(User user) {
-        List<Course> courses = getAll();
-        List<Course> resultList = new ArrayList<>();
-        courses.stream().filter((course)
-                -> (course.isAttended(user) || course.isSubscribed(user) || course.getOwner() == user))
-                .forEach((course) -> {
-                    resultList.add(course);
-                });
-        return resultList;
-        //return courseDao.getUserCourses(user);
+        return courseDao.getUserCourses(user);
     }
 
     @Override
