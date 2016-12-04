@@ -24,10 +24,15 @@ public class UserDTO {
     }
 
     public boolean canSee(Course course) {
+        if (course.getStatus().getName().equals("Proposal")) {
+            return !((user == null) || (user.getUserRole().equals("User")));
+        }
+
         if (course.getStatus().getName().equals("Draft")) {
             return course.getOwner().equals(user);
         } else {
             return true;
         }
+
     }
 }

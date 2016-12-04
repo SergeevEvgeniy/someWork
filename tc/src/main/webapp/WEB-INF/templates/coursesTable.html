@@ -30,7 +30,7 @@
                 <div th:text="${course.category.name}"></div>
             </td>
             <td sec:authorize="hasAuthority('Lector')">
-                <div class="btn-group">
+                <div class="btn-group" th:unless="${course.status.name} == Proposal">
                     <a class="btn btn-mini" th:href="@{/courses/} + ${course.id}+ @{/update}">Update</a>
                     <a class="btn dropdown-toggle btn-mini" data-toggle="dropdown" href="#">
                         <span class="caret"></span>
