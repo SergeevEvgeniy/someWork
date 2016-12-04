@@ -24,13 +24,23 @@
             <td th:text="${course.id}">Id</td>
             <td>
                 <a th:href="@{/courses/} + ${course.id}" th:text="${course.name}">Course </a>
-                <span class="label" th:if="(${course.status.name}==Draft)">Draft</span>
+                <span class="label" th:text="${course.status.name}"></span>
             </td>
             <td sec:authorize="hasAuthority('User')">
                 <div th:text="${course.category.name}"></div>
             </td>
             <td sec:authorize="hasAuthority('Lector')">
-                <a class="btn btn-mini" th:href="@{/courses/} + ${course.id}+ @{/update}">Update</a>
+                <div class="btn-group">
+                    <a class="btn btn-mini" th:href="@{/courses/} + ${course.id}+ @{/update}">Update</a>
+                    <a class="btn dropdown-toggle btn-mini" data-toggle="dropdown" href="#">
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a th:href="@{/courses/} + ${course.id}+ @{/update}">Send to Review</a>
+                        </li>
+                    </ul>
+                </div>
             </td>
             <td sec:authorize="hasAuthority('User')">
                 <a th:href="@{'/courses/'+${course.getId()}+ '/participants'}"

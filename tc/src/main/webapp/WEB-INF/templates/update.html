@@ -45,9 +45,12 @@
                     </div>
                     <div class="form-actions">
                         <button id="createButton" class="btn btn-primary" type="submit">Update</button>
+                        <button id="reviewButton" class="btn btn-warning" type="submit" form="reviewForm" formmethod="POST">Review</button>
                         <a class="btn" href="/courses">Cancel</a>
                     </div>
                 </fieldset>
+            </form>
+            <form class="form-horizontal" th:action="@{/courses/} + ${course.id}+ @{/send_to_review}" method="post" id="reviewForm">
             </form>
         </div>
     </body>

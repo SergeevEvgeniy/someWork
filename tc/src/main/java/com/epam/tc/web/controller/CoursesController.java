@@ -247,4 +247,14 @@ public class CoursesController {
             throw new IdParsingException("Cannot parse to int courseId: " + courseId, nfe);
         }
     }
+
+    @RequestMapping(value = "/courses/{courseId}/send_to_review", method = RequestMethod.POST)
+    public void sendToReview(final HttpServletResponse resp,
+            @ModelAttribute CourseForm courseForm) throws IOException {
+
+        Course course = getCourse(courseForm.getCourseId());
+        course.setStatus(statusService.getByName("Proposal"));
+        courseService.update(course);
+        resp.sendRedirect("/courses");
+    }
 }
