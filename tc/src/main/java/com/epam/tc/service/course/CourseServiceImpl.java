@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.epam.tc.dao.course.CourseDao;
+import com.epam.tc.model.Category;
 import com.epam.tc.model.User;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,8 +22,12 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<Course> getAll() {
-        return courseDao.getAll();
+    public List<Course> getAll(Category filterCategory) {
+        if ((filterCategory.getName().equals("All"))) {
+            return courseDao.getAll();
+        } else {
+            return courseDao.getByCategory(filterCategory);
+        }
     }
 
     @Override
@@ -53,5 +58,10 @@ public class CourseServiceImpl implements CourseService {
         course.addAttender(attender);
         course.deleteSubscriber(attender);
         courseDao.update(course);
+    }
+
+    @Override
+    public List<Course> getUserCourses(User user, Category category) {
+        return courseDao.getUserCourses(user, category);
     }
 }

@@ -1,6 +1,6 @@
 package com.epam.tc.web.controller;
 
-import com.epam.tc.service.DefaultValuePopulator;
+import com.epam.tc.init.SampleDataPopulator;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,7 +14,7 @@ public class LoginController {
     public void login(){}
 
     @Autowired
-    DefaultValuePopulator defaultValuePopulator;
+    SampleDataPopulator defaultValuePopulator;
 
     @PostConstruct
     public void init() {

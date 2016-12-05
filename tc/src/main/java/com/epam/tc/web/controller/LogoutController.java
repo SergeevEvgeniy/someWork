@@ -1,6 +1,6 @@
 package com.epam.tc.web.controller;
 
-import com.epam.tc.security.AuthenticatedUser;
+import com.epam.tc.service.user.UserService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,15 +14,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class LogoutController {
-    
+
     @Autowired
-    private AuthenticatedUser authenticatedUser;
-    
+    private UserService userService;
+
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public Model login(Model model) {
-        return model.addAttribute("user", authenticatedUser.getUserEmail());
+        return model.addAttribute("user", userService.getUserEmail());
     }
-    
+
     @RequestMapping(value = "/logout_action", method = RequestMethod.GET)
     public String logoutPage(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

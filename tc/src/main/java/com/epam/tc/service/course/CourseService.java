@@ -1,5 +1,6 @@
 package com.epam.tc.service.course;
 
+import com.epam.tc.model.Category;
 import com.epam.tc.model.Course;
 import com.epam.tc.model.User;
 import java.util.List;
@@ -10,7 +11,9 @@ public interface CourseService {
 
     void delete(Course course);
 
-    List<Course> getAll();
+    List<Course> getAll(Category filterCategory);
+
+    List<Course> getUserCourses(User user, Category category);
 
     Course getById(int id);
 

@@ -1,7 +1,6 @@
 package com.epam.tc.model;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -40,6 +39,30 @@ public class Course implements Serializable {
     @ManyToOne
     @JoinColumn(name = "UserId")
     private User owner;
+
+    @ManyToOne
+    @JoinColumn(name = "StatusId")
+    private Status status;
+
+    @ManyToOne
+    @JoinColumn(name = "CategoryId")
+    private Category category;
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 
     public boolean isSubscribed(User user) {
         return subscribers.contains(user);

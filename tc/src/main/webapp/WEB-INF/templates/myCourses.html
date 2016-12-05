@@ -8,15 +8,12 @@
         <div class="container">
             <header>
                 <h1>
-                    Courses
+                    My Courses
                     <script th:replace="logoutHeader"></script>
                 </h1>
             </header>
-            <div class="courses-top-control" sec:authorize="hasAuthority('User')">
-                <a class="btn" href="/mycourses">My Courses</a>
-            </div>
-            <div class="courses-top-control" sec:authorize="hasAuthority('Lector')">
-                <a id="createCourseButton" class="btn btn-primary" href="/courses/create">Create</a>
+            <div class="courses-top-control">
+                <a class="btn" href="/courses">Courses</a>
             </div>
             <script th:replace="coursesTable"></script>
         </div>
