@@ -3,6 +3,7 @@ package com.epam.tc.web.controller;
 import com.epam.tc.dto.UserDTO;
 import com.epam.tc.exception.CourseNotFoundException;
 import com.epam.tc.exception.IdParsingException;
+import com.epam.tc.mail.Mailler;
 import com.epam.tc.model.Category;
 import com.epam.tc.model.Course;
 import com.epam.tc.model.User;
@@ -39,6 +40,8 @@ public class CoursesController {
     private CategoryService categoryService;
     @Autowired
     private StatusService statusService;
+    @Autowired
+    private Mailler mailler;
 
     private static final Logger LOG = LoggerFactory.getLogger(CoursesController.class);
 
@@ -265,6 +268,7 @@ public class CoursesController {
         Course course = getCourse(courseForm.getCourseId());
         course.setStatus(statusService.getByName("Proposal"));
         courseService.update(course);
+        mailler.sendMail(course);
         resp.sendRedirect("/courses");
     }
 }

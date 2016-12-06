@@ -28,7 +28,7 @@ public class UserDaoImpl extends CRUDdaoImpl<User> implements UserDao {
                     .setParameter("login", login)
                     .getSingleResult();
         } catch (NoResultException e) {
-            LOG.info("User with login {0} not found", login);
+            LOG.info("User with login " + login + " not found");
             LOG.debug("No user found ", e);
             return null;
         }
@@ -41,7 +41,7 @@ public class UserDaoImpl extends CRUDdaoImpl<User> implements UserDao {
                     .setParameter("email", email)
                     .getSingleResult();
         } catch (NoResultException e) {
-            LOG.info("User with email {0} not found", email);
+            LOG.info("User with email " + email + " not found");
             LOG.debug("No user found ", e);
             return null;
         }

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8"/>
+    </head>
+    <body>
+        <div th:text="${course.owner.email}" +  " had created a new course."></div>
+        --------------------------
+        <div class="control-label" th:text="Name +':'+ ${course.name}"></div>
+        <div class="control-label" th:text="Category +':'+ ${course.category.name}"></div>
+        <div class="control-label" th:text="Description +':'+ ${course.description}"></div>
+        <div class="control-label" th:text="Links +':'+ ${course.links}"></div>
+        --------------------------
+        <p>Please, review this course at <a href="#">link</a></p>
+    </body>
+</html>
