@@ -42,9 +42,9 @@ public class CourseDaoImpl extends CRUDdaoImpl<Course> implements CourseDao {
         List<Course> courses = new ArrayList<>();
 
         courses.addAll(entityManager.createQuery(
-                "select c from Course c join c.subscribers s where s.id= :id",
+                "select c from Course c join c.subscribers s where s.id= :userId",
                 Course.class)
-                .setParameter("id", user.getId())
+                .setParameter("userId", user.getId())
                 .getResultList());
 
         courses.addAll(entityManager.createQuery(
