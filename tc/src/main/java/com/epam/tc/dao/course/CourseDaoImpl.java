@@ -42,16 +42,16 @@ public class CourseDaoImpl extends CRUDdaoImpl<Course> implements CourseDao {
     public List<Course> getUserCourses(User user, Category category) {
         List<Course> courses = new ArrayList<>();
 
-        String query = "select c from Course c join c.subscribers s where s.id = :id";
+        String query = "select c from Course c join c.subscribers s where s.id = :userId";
         if (!category.getName().equals("All")) {
             query += " and c.category = :category";
             courses.addAll(entityManager.createQuery(query, Course.class)
-                    .setParameter("id", user.getId())
+                    .setParameter("userId", user.getId())
                     .setParameter("category", category)
                     .getResultList());
         } else {
             courses.addAll(entityManager.createQuery(query, Course.class)
-                    .setParameter("id", user.getId())
+                    .setParameter("userId", user.getId())
                     .getResultList());
         }
 

@@ -45,7 +45,7 @@ public class CoursesController {
 
     private static final Logger LOG = LoggerFactory.getLogger(CoursesController.class);
 
-    private static final String COURSEID = "courseId";
+    private static final String COURSE_ID = "courseId";
     private static final String PATH = "path";
     private Category filterCategory;
 
@@ -64,7 +64,7 @@ public class CoursesController {
     }
 
     @RequestMapping(value = {"/courses/{courseId}"}, method = RequestMethod.GET)
-    public ModelAndView details(@PathVariable(COURSEID) String courseId) {
+    public ModelAndView details(@PathVariable(COURSE_ID) String courseId) {
         ModelAndView mav = new ModelAndView("403");
 
         if (getCurrentUser().getUserRole().equals("User")) {
@@ -103,7 +103,7 @@ public class CoursesController {
     }
 
     @RequestMapping(value = "/courses/{courseId}/update", method = RequestMethod.GET)
-    public ModelAndView printForUpdateCourse(@PathVariable(COURSEID) String courseId
+    public ModelAndView printForUpdateCourse(@PathVariable(COURSE_ID) String courseId
     ) {
         ModelAndView mav = new ModelAndView("troublePage");
         Course course = getCourse(courseId);
@@ -135,7 +135,7 @@ public class CoursesController {
     }
 
     @RequestMapping(value = "/courses/{courseId}/subscribe", method = RequestMethod.GET)
-    public ModelAndView printForSubscribeCourse(@PathVariable(COURSEID) String courseId
+    public ModelAndView printForSubscribeCourse(@PathVariable(COURSE_ID) String courseId
     ) {
         if (!"".equals(userService.getUserEmail())) {
             ModelAndView mav = new ModelAndView("subscribe");
@@ -148,14 +148,14 @@ public class CoursesController {
 
     @RequestMapping(value = "/courses/{courseId}/subscribe", method = RequestMethod.POST)
     public void subscribeOnCourse(final HttpServletResponse resp,
-            @PathVariable(COURSEID) String courseId) throws IOException {
+            @PathVariable(COURSE_ID) String courseId) throws IOException {
         courseService.addSubscriber(Integer.parseInt(courseId),
                 getCurrentUser());
         resp.sendRedirect("/courses");
     }
 
     @RequestMapping(value = "/courses/{courseId}/attend", method = RequestMethod.GET)
-    public ModelAndView printAttendess(@PathVariable(COURSEID) String courseId
+    public ModelAndView printAttendess(@PathVariable(COURSE_ID) String courseId
     ) {
         ModelAndView mav;
         Course course = getCourse(courseId);
@@ -172,14 +172,14 @@ public class CoursesController {
 
     @RequestMapping(value = "/courses/{courseId}/attend", method = RequestMethod.POST)
     public void attendOnCourse(final HttpServletResponse resp,
-            @PathVariable(COURSEID) int courseId) throws IOException {
+            @PathVariable(COURSE_ID) int courseId) throws IOException {
         courseService.addAttender(courseId,
                 getCurrentUser());
         resp.sendRedirect("/courses");
     }
 
     @RequestMapping(value = "/courses/{courseId}/evaluate", method = RequestMethod.GET)
-    public ModelAndView evaluate(@PathVariable(COURSEID) String courseId
+    public ModelAndView evaluate(@PathVariable(COURSE_ID) String courseId
     ) {
         ModelAndView mav;
         Course course = getCourse(courseId);
@@ -197,7 +197,7 @@ public class CoursesController {
     @RequestMapping(value = "/courses/{courseId}/evaluate", method = RequestMethod.POST)
     public void evaluateCourse(final HttpServletRequest req,
             final HttpServletResponse resp,
-            @PathVariable(COURSEID) String courseId) throws IOException {
+            @PathVariable(COURSE_ID) String courseId) throws IOException {
         try {
             int grade = Integer.parseInt(req.getParameter("grade"));
             Course course = getCourse(courseId);
@@ -214,7 +214,7 @@ public class CoursesController {
     }
 
     @RequestMapping(value = {"/courses/{courseId}/participants"}, method = RequestMethod.GET)
-    public ModelAndView participants(@PathVariable(COURSEID) String courseId
+    public ModelAndView participants(@PathVariable(COURSE_ID) String courseId
     ) {
         ModelAndView mav = new ModelAndView("participants");
         mav.addObject("course", getCourse(courseId));
