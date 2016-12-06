@@ -12,6 +12,8 @@ public interface CourseService {
 
     List<Course> getAll();
 
+    List<Course> getUserCourses(User user);
+
     Course getById(int id);
 
     void update(Course course);
@@ -19,4 +21,6 @@ public interface CourseService {
     void addSubscriber(int courseId, User subscriber);
 
     void addAttender(int courseId, User attender);
+
+    List<Course> filterCourses(List<Course> courses, String filterCondition);
 }

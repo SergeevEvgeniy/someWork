@@ -2,6 +2,9 @@ package com.epam.tc.dao.course;
 
 import com.epam.tc.dao.CRUDdaoImpl;
 import com.epam.tc.model.Course;
+import com.epam.tc.model.User;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -32,5 +35,30 @@ public class CourseDaoImpl extends CRUDdaoImpl<Course> implements CourseDao {
             LOG.debug("No course found ", e);
             return null;
         }
+    }
+
+    @Override
+    public List<Course> getUserCourses(User user) {
+        List<Course> courses = new ArrayList<>();
+
+        courses.addAll(entityManager.createQuery(
+                "select c from Course c join c.subscribers s where s.id= :userId",
+                Course.class)
+                .setParameter("userId", user.getId())
+                .getResultList());
+
+        courses.addAll(entityManager.createQuery(
+                "select c from Course c join c.attenders a where a.user= :user",
+                Course.class)
+                .setParameter("user", user)
+                .getResultList());
+
+        courses.addAll(entityManager.createQuery(
+                "select c from Course c where c.owner = :user",
+                Course.class)
+                .setParameter("user", user)
+                .getResultList());
+
+        return courses;
     }
 }

@@ -1,15 +1,17 @@
-package com.epam.tc.service;
+package com.epam.tc.init;
 
+import com.epam.tc.model.Category;
 import com.epam.tc.model.Course;
 import com.epam.tc.model.User;
 import com.epam.tc.model.UserRole;
+import com.epam.tc.service.category.CategoryService;
 import com.epam.tc.service.course.CourseService;
 import com.epam.tc.service.evaluate.EvaluateService;
 import com.epam.tc.service.user.UserService;
 import com.epam.tc.service.userRole.UserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class DefaultValuePopulator {
+public class SampleDataPopulator {
 
     @Autowired
     private CourseService courseService;
@@ -19,8 +21,13 @@ public class DefaultValuePopulator {
     private UserRoleService userRoleService;
     @Autowired
     private EvaluateService evaluateService;
+    @Autowired
+    private CategoryService categoryService;
 
     public void initDBvaluesIsEmpty() {
+        if (categoryService.getAll().isEmpty()) {
+            setDefaultCategories();
+        }
         if (userRoleService.getAll().isEmpty()) {
             setDefaultUserRoles();
         }
@@ -37,41 +44,49 @@ public class DefaultValuePopulator {
 
         course = new Course("Draft");
         course.setOwner(userService.getUserByLogin("lecturer-a"));
+        course.setCategory(categoryService.getByName("Development"));
         courseService.create(course);
 
         course = new Course("Proposal");
         course.setOwner(userService.getUserByLogin("lecturer-a"));
+        course.setCategory(categoryService.getByName("Development"));
         courseService.create(course);
 
         course = new Course("Rejected");
         course.setOwner(userService.getUserByLogin("lecturer-a"));
+        course.setCategory(categoryService.getByName("Development"));
         courseService.create(course);
 
         course = new Course("New");
         course.setOwner(userService.getUserByLogin("lecturer-a"));
+        course.setCategory(categoryService.getByName("Development"));
         courseService.create(course);
         courseService.addSubscriber(course.getId(), userService.getUserByLogin("user-a"));
 
         course = new Course("Open");
         course.setOwner(userService.getUserByLogin("lecturer-a"));
+        course.setCategory(categoryService.getByName("Development"));
         courseService.create(course);
         courseService.addSubscriber(course.getId(), userService.getUserByLogin("user-b"));
         courseService.addAttender(course.getId(), userService.getUserByLogin("user-a"));
 
         course = new Course("Ready");
         course.setOwner(userService.getUserByLogin("lecturer-a"));
+        course.setCategory(categoryService.getByName("Project Management"));
         courseService.create(course);
         courseService.addAttender(course.getId(), userService.getUserByLogin("user-a"));
         courseService.addAttender(course.getId(), userService.getUserByLogin("user-b"));
 
         course = new Course("In Progress");
         course.setOwner(userService.getUserByLogin("lecturer-a"));
+        course.setCategory(categoryService.getByName("Project Management"));
         courseService.create(course);
         courseService.addAttender(course.getId(), userService.getUserByLogin("user-a"));
         courseService.addAttender(course.getId(), userService.getUserByLogin("user-b"));
 
         course = new Course("Finished");
         course.setOwner(userService.getUserByLogin("lecturer-a"));
+        course.setCategory(categoryService.getByName("Project Management"));
         courseService.create(course);
         courseService.addAttender(course.getId(), userService.getUserByLogin("user-a"));
         courseService.addAttender(course.getId(), userService.getUserByLogin("user-b"));
@@ -92,6 +107,16 @@ public class DefaultValuePopulator {
 
         userRole = new UserRole("User");
         userRoleService.create(userRole);
+    }
+
+    private void setDefaultCategories() {
+        Category category;
+
+        category = new Category("Development");
+        categoryService.create(category);
+
+        category = new Category("Project Management");
+        categoryService.create(category);
     }
 
     private void setDefaultUsers() {

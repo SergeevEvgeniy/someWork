@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.epam.tc.dao.course.CourseDao;
 import com.epam.tc.model.User;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.stream.Collectors;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -53,5 +56,23 @@ public class CourseServiceImpl implements CourseService {
         course.addAttender(attender);
         course.deleteSubscriber(attender);
         courseDao.update(course);
+    }
+
+    @Override
+    public List<Course> getUserCourses(User user) {
+        return courseDao.getUserCourses(user);
+    }
+
+    @Override
+    public List<Course> filterCourses(List<Course> courses, String filterCondition) {
+        List<Course> resultList;
+        if (!"All".equals(filterCondition)) {
+            resultList = courses.stream().filter((course)
+                    -> (course.getCategory().getName().equals(filterCondition)))
+                    .collect(Collectors.toList());
+            return resultList;
+        } else {
+            return courses;
+        }
     }
 }

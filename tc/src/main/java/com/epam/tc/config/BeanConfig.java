@@ -1,6 +1,6 @@
 package com.epam.tc.config;
 
-import com.epam.tc.service.DefaultValuePopulator;
+import com.epam.tc.init.SampleDataPopulator;
 import com.epam.tc.service.user.UserDetailsServiceImpl;
 import java.util.HashSet;
 import java.util.Properties;
@@ -174,8 +174,8 @@ public class BeanConfig extends WebMvcConfigurerAdapter implements ApplicationCo
     }
 
     @Bean
-    public DefaultValuePopulator getDefaultValuePopulator() {
-        return new DefaultValuePopulator();
+    public SampleDataPopulator getDefaultValuePopulator() {
+        return new SampleDataPopulator();
     }
 
     @Bean(name = "simpleMappingExceptionResolver")
