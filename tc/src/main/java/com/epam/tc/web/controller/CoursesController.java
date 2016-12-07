@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -262,21 +263,16 @@ public class CoursesController {
         resp.sendRedirect("/courses");
     }
 
-    //@Secured({"Department_Manager", "\"Department Manager\""})
-    //something bad here and it's not work
     @RequestMapping(value = "/courses/{courseId}/approve", method = RequestMethod.GET)
     public ModelAndView approve(@PathVariable(COURSE_ID) String courseId) {
         ModelAndView mav = new ModelAndView("approve");
         Course course = getCourse(courseId);
         String userRole = getCurrentUser().getUserRole();
-        if (userRole.equals("Department Manager") || (userRole.equals("Knowledge Manager"))) {
-            if (course.getStatus().getName().equals("Proposal")) {
-                mav.addObject("course", course);
-            } else {
-                mav = new ModelAndView("troublePage");
-            }
+        if (course.getStatus().getName().equals("Proposal")) {
+            mav.addObject("course", course);
+            mav.addObject("userRole", userRole);
         } else {
-            mav = new ModelAndView("403");
+            mav = new ModelAndView("troublePage");
         }
         return mav;
     }
