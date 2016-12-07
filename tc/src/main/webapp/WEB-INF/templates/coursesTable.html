@@ -43,7 +43,7 @@
                 </div>
             </td>
             <td sec:authorize="hasAuthority('User')">
-                <a th:href="@{'/courses/'+${course.getId()}+ '/participants'}"
+                <a th:href="@{'/courses/'+${course.id}+ '/participants'}"
                    th:text="${course.getSubscribers().size()} +'/'+ ${course.getAttenders().size()}"> 
                 </a> 
             </td>
@@ -53,12 +53,16 @@
             <td sec:authorize="hasAuthority('User')">
                 <a class="btn btn-mini" 
                    th:if="${person.canSubscribe(course)}"
-                   th:href="'/courses/'+${course.getId()}+ '/subscribe'">Subscribe</a>
+                   th:href="'/courses/'+${course.id}+ '/subscribe'">Subscribe</a>
                 <a class="btn btn-mini"
                    th:if="${person.canAttend(course)}"
-                   th:href="'/courses/'+${course.getId()}+ '/attend'">Attend</a>
+                   th:href="'/courses/'+${course.id}+ '/attend'">Attend</a>
                 <a class="btn btn-mini" th:if="${person.canEvaluate(course)}"
-                   th:href="'/courses/'+${course.getId()}+ '/evaluate'">Evaluate</a>
+                   th:href="'/courses/'+${course.id}+ '/evaluate'">Evaluate</a>
+            </td>
+            <td sec:authorize="hasAnyAuthority('Department Manager', 'Knowledge Manager')">
+                <a class="btn btn-mini"  th:if="${course.status.name} == 'Proposal'"
+                   th:href="'/courses/'+${course.id}+ '/approve'">Approve</a>
             </td>
         </tr>
     </tbody>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <script th:replace="headerLinks"></script>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>
+                    Approve
+                    <script th:replace="logoutHeader"></script>
+                </h1>
+            </header>
+            <form class="form-horizontal">
+                <div class="control-group">
+                    <div class="control-label">Name</div>
+                    <div id="titleField" class="controls text" th:text="${course.name}"></div>
+                </div>
+                <div class="control-group">
+                    <div class="control-label">Lecturer</div>
+                    <div id="ownerField" class="controls text" th:text="${course.owner.email}"></div>
+                </div>
+                <div class="control-group">
+                    <div class="control-label">Category</div>
+                    <div id="categoryField" class="controls text" th:text="${course.category.name}"></div>
+                </div>
+                <div class="control-group">
+                    <div class="control-label">Description</div>
+                    <div id="descriptionField" class="controls text" th:text="${course.description}"></div>
+                </div>
+                <div class="control-group">
+                    <div class="control-label">Links</div>
+                    <div id="linksField" class="controls text" th:text="${course.links}"></div>
+                </div>
+                <div class="control-group">
+                    <div class="control-label">Department Manager</div>
+                    <div id="dmField" class="controls text" th:text="${userEmail}"></div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Decision</label>
+                    <div class="controls">
+                        <select class="span5">
+                            <option>Select one</option>
+                            <option>Approve</option>
+                            <option>Reject</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Reason</label>
+                    <div class="controls">
+                        <textarea class="span5" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="control-label">Knowledge Manager</div>
+                    <div id="kmField" class="controls text" th:text="${userEmail}"></div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Decision</label>
+                    <div class="controls">
+                        <select class="span5">
+                            <option>Select one</option>
+                            <option>Approve</option>
+                            <option>Reject</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Reason</label>
+                    <div class="controls">
+                        <textarea class="span5"></textarea>
+                    </div>
+                </div>
+                <div class="form-actions actions-without-form">
+                    <button class="btn btn-primary">Save</button>
+                    <a class="btn" href="/courses">Back</a>
+                </div>
+            </form>
+        </div>
+    </body>
+</html> 

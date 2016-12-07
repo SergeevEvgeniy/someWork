@@ -103,8 +103,7 @@ public class CoursesController {
     }
 
     @RequestMapping(value = "/courses/{courseId}/update", method = RequestMethod.GET)
-    public ModelAndView printForUpdateCourse(@PathVariable(COURSE_ID) String courseId
-    ) {
+    public ModelAndView printForUpdateCourse(@PathVariable(COURSE_ID) String courseId) {
         ModelAndView mav = new ModelAndView("troublePage");
         Course course = getCourse(courseId);
         String ownerEmail = course.getOwner().getEmail();
@@ -120,8 +119,7 @@ public class CoursesController {
     }
 
     @RequestMapping(value = "/courses/{courseId}/update", method = RequestMethod.POST)
-    public void updateCourse(final HttpServletRequest req,
-            final HttpServletResponse resp,
+    public void updateCourse(final HttpServletRequest req, final HttpServletResponse resp,
             @ModelAttribute CourseForm courseForm) throws IOException {
 
         Course course = getCourse(courseForm.getCourseId());
@@ -135,8 +133,7 @@ public class CoursesController {
     }
 
     @RequestMapping(value = "/courses/{courseId}/subscribe", method = RequestMethod.GET)
-    public ModelAndView printForSubscribeCourse(@PathVariable(COURSE_ID) String courseId
-    ) {
+    public ModelAndView printForSubscribeCourse(@PathVariable(COURSE_ID) String courseId) {
         if (!"".equals(userService.getUserEmail())) {
             ModelAndView mav = new ModelAndView("subscribe");
             mav.addObject("course", getCourse(courseId));
@@ -149,14 +146,12 @@ public class CoursesController {
     @RequestMapping(value = "/courses/{courseId}/subscribe", method = RequestMethod.POST)
     public void subscribeOnCourse(final HttpServletResponse resp,
             @PathVariable(COURSE_ID) String courseId) throws IOException {
-        courseService.addSubscriber(Integer.parseInt(courseId),
-                getCurrentUser());
+        courseService.addSubscriber(Integer.parseInt(courseId), getCurrentUser());
         resp.sendRedirect("/courses");
     }
 
     @RequestMapping(value = "/courses/{courseId}/attend", method = RequestMethod.GET)
-    public ModelAndView printAttendess(@PathVariable(COURSE_ID) String courseId
-    ) {
+    public ModelAndView printAttendess(@PathVariable(COURSE_ID) String courseId) {
         ModelAndView mav;
         Course course = getCourse(courseId);
         String username = userService.getUserEmail();
@@ -173,14 +168,12 @@ public class CoursesController {
     @RequestMapping(value = "/courses/{courseId}/attend", method = RequestMethod.POST)
     public void attendOnCourse(final HttpServletResponse resp,
             @PathVariable(COURSE_ID) int courseId) throws IOException {
-        courseService.addAttender(courseId,
-                getCurrentUser());
+        courseService.addAttender(courseId, getCurrentUser());
         resp.sendRedirect("/courses");
     }
 
     @RequestMapping(value = "/courses/{courseId}/evaluate", method = RequestMethod.GET)
-    public ModelAndView evaluate(@PathVariable(COURSE_ID) String courseId
-    ) {
+    public ModelAndView evaluate(@PathVariable(COURSE_ID) String courseId) {
         ModelAndView mav;
         Course course = getCourse(courseId);
         User user = getCurrentUser();
@@ -195,8 +188,7 @@ public class CoursesController {
     }
 
     @RequestMapping(value = "/courses/{courseId}/evaluate", method = RequestMethod.POST)
-    public void evaluateCourse(final HttpServletRequest req,
-            final HttpServletResponse resp,
+    public void evaluateCourse(final HttpServletRequest req, final HttpServletResponse resp,
             @PathVariable(COURSE_ID) String courseId) throws IOException {
         try {
             int grade = Integer.parseInt(req.getParameter("grade"));
@@ -214,16 +206,14 @@ public class CoursesController {
     }
 
     @RequestMapping(value = {"/courses/{courseId}/participants"}, method = RequestMethod.GET)
-    public ModelAndView participants(@PathVariable(COURSE_ID) String courseId
-    ) {
+    public ModelAndView participants(@PathVariable(COURSE_ID) String courseId) {
         ModelAndView mav = new ModelAndView("participants");
         mav.addObject("course", getCourse(courseId));
         return mav;
     }
 
     @RequestMapping(value = {"/mycourses"}, method = RequestMethod.GET)
-    public ModelAndView myCourses(final HttpServletRequest req
-    ) {
+    public ModelAndView myCourses(final HttpServletRequest req) {
         ModelAndView mav = new ModelAndView("myCourses");
         User user = getCurrentUser();
         UserDTO userDTO = new UserDTO(user);
@@ -270,5 +260,24 @@ public class CoursesController {
         courseService.update(course);
         mailler.sendMail(course);
         resp.sendRedirect("/courses");
+    }
+
+    //@Secured({"Department_Manager", "\"Department Manager\""})
+    //something bad here and it's not work
+    @RequestMapping(value = "/courses/{courseId}/approve", method = RequestMethod.GET)
+    public ModelAndView approve(@PathVariable(COURSE_ID) String courseId) {
+        ModelAndView mav = new ModelAndView("approve");
+        Course course = getCourse(courseId);
+        String userRole = getCurrentUser().getUserRole();
+        if (userRole.equals("Department Manager") || (userRole.equals("Knowledge Manager"))) {
+            if (course.getStatus().getName().equals("Proposal")) {
+                mav.addObject("course", course);
+            } else {
+                mav = new ModelAndView("troublePage");
+            }
+        } else {
+            mav = new ModelAndView("403");
+        }
+        return mav;
     }
 }
