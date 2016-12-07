@@ -11,7 +11,7 @@
                     <script th:replace="logoutHeader"></script>
                 </h1>
             </header>
-            <form class="form-horizontal">
+            <form class="form-horizontal" th:action="@{/courses/} + ${course.id}+ @{/approve}" method="post">
                 <div class="control-group">
                     <div class="control-label">Name</div>
                     <div id="titleField" class="controls text" th:text="${course.name}"></div>
@@ -32,48 +32,49 @@
                     <div class="control-label">Links</div>
                     <div id="linksField" class="controls text" th:text="${course.links}"></div>
                 </div>
-                <div th:if="${userRole} == 'Department Manager'">
-                    <div class="control-group">
-                        <div class="control-label">Department Manager</div>
-                        <div id="dmField" class="controls text" th:text="${userEmail}"></div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label">Decision</label>
-                        <div class="controls">
-                            <select class="span5">
-                                <option>Select one</option>
-                                <option>Approve</option>
-                                <option>Reject</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label">Reason</label>
-                        <div class="controls">
-                            <textarea class="span5" rows="3"></textarea>
-                        </div>
+                <div class="control-group">
+                    <div class="control-label">Department Manager</div>
+                    <div id="dmField" class="controls text" th:text="${userEmail}"></div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Decision</label>
+                    <div class="controls">
+                        <select class="span5" name="dm_decision" required th:disabled="${userRole} != 'Department Manager'">
+                            <option></option>
+                            <option>Approve</option>
+                            <option>Reject</option>
+                        </select>
                     </div>
                 </div>
-                <div th:if="${userRole} == 'Knowledge Manager'">
-                    <div class="control-group">
-                        <div class="control-label">Knowledge Manager</div>
-                        <div id="kmField" class="controls text" th:text="${userEmail}"></div>
+                <div class="control-group">
+                    <label class="control-label">Reason</label>
+                    <div class="controls">
+                        <textarea class="span5" required name="dm_comment"
+                                  th:disabled="${userRole} != 'Department Manager'"
+                                  th:text="${course.decision.dm_decision}+' '+${course.decision.dm_comment}">
+                        </textarea>
                     </div>
-                    <div class="control-group">
-                        <label class="control-label">Decision</label>
-                        <div class="controls">
-                            <select class="span5">
-                                <option>Select one</option>
-                                <option>Approve</option>
-                                <option>Reject</option>
-                            </select>
-                        </div>
+                </div>
+                <div class="control-group">
+                    <div class="control-label">Knowledge Manager</div>
+                    <div id="kmField" class="controls text" th:text="${userEmail}"></div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Decision</label>
+                    <div class="controls">
+                        <select class="span5" name="km_decision" required th:disabled="${userRole} != 'Knowledge Manager'">
+                            <option></option>
+                            <option>Approve</option>
+                            <option>Reject</option>
+                        </select>
                     </div>
-                    <div class="control-group">
-                        <label class="control-label">Reason</label>
-                        <div class="controls">
-                            <textarea class="span5"></textarea>
-                        </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Reason</label>
+                    <div class="controls">
+                        <textarea class="span5" required name="km_comment"
+                                  th:disabled="${userRole} != 'Knowledge Manager'">
+                        </textarea>
                     </div>
                 </div>
                 <div class="form-actions actions-without-form">

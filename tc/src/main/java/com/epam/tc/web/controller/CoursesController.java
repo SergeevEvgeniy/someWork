@@ -6,6 +6,7 @@ import com.epam.tc.exception.IdParsingException;
 import com.epam.tc.mail.Mailler;
 import com.epam.tc.model.Category;
 import com.epam.tc.model.Course;
+import com.epam.tc.model.Decision;
 import com.epam.tc.model.User;
 import com.epam.tc.service.category.CategoryService;
 import com.epam.tc.service.course.CourseService;
@@ -19,7 +20,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -275,5 +275,30 @@ public class CoursesController {
             mav = new ModelAndView("troublePage");
         }
         return mav;
+    }
+
+    @RequestMapping(value = "/courses/{courseId}/approve", method = RequestMethod.POST)
+    public void approveOrReject(@PathVariable(COURSE_ID) String courseId,
+            final HttpServletRequest req, final HttpServletResponse resp) throws IOException {
+
+        User user = getCurrentUser();
+        Course course = getCourse(COURSE_ID);
+        Decision decision = course.getDecision();
+
+        switch (user.getUserRole()) {
+            case "Department Manager":
+                decision.setDm(user);
+                decision.setDm_decision(req.getParameter("dm_decision"));
+                decision.setDm_comment(req.getParameter("dm_comment"));
+                break;
+            case "Knowledge Manager":
+                decision.setKm(user);
+                decision.setKm_decision(req.getParameter("km_decision"));
+                decision.setKm_comment(req.getParameter("km_comment"));
+                break;
+        }
+        course.setDecision(decision);
+        courseService.update(course);
+        resp.sendRedirect("/courses");
     }
 }
