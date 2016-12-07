@@ -32,44 +32,48 @@
                     <div class="control-label">Links</div>
                     <div id="linksField" class="controls text" th:text="${course.links}"></div>
                 </div>
-                <div class="control-group">
-                    <div class="control-label">Department Manager</div>
-                    <div id="dmField" class="controls text" th:text="${userEmail}"></div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label">Decision</label>
-                    <div class="controls">
-                        <select class="span5">
-                            <option>Select one</option>
-                            <option>Approve</option>
-                            <option>Reject</option>
-                        </select>
+                <div th:if="${userRole} == 'Department Manager'">
+                    <div class="control-group">
+                        <div class="control-label">Department Manager</div>
+                        <div id="dmField" class="controls text" th:text="${userEmail}"></div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Decision</label>
+                        <div class="controls">
+                            <select class="span5">
+                                <option>Select one</option>
+                                <option>Approve</option>
+                                <option>Reject</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Reason</label>
+                        <div class="controls">
+                            <textarea class="span5" rows="3"></textarea>
+                        </div>
                     </div>
                 </div>
-                <div class="control-group">
-                    <label class="control-label">Reason</label>
-                    <div class="controls">
-                        <textarea class="span5" rows="3"></textarea>
+                <div th:if="${userRole} == 'Knowledge Manager'">
+                    <div class="control-group">
+                        <div class="control-label">Knowledge Manager</div>
+                        <div id="kmField" class="controls text" th:text="${userEmail}"></div>
                     </div>
-                </div>
-                <div class="control-group">
-                    <div class="control-label">Knowledge Manager</div>
-                    <div id="kmField" class="controls text" th:text="${userEmail}"></div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label">Decision</label>
-                    <div class="controls">
-                        <select class="span5">
-                            <option>Select one</option>
-                            <option>Approve</option>
-                            <option>Reject</option>
-                        </select>
+                    <div class="control-group">
+                        <label class="control-label">Decision</label>
+                        <div class="controls">
+                            <select class="span5">
+                                <option>Select one</option>
+                                <option>Approve</option>
+                                <option>Reject</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label">Reason</label>
-                    <div class="controls">
-                        <textarea class="span5"></textarea>
+                    <div class="control-group">
+                        <label class="control-label">Reason</label>
+                        <div class="controls">
+                            <textarea class="span5"></textarea>
+                        </div>
                     </div>
                 </div>
                 <div class="form-actions actions-without-form">
