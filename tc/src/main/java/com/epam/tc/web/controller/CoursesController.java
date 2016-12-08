@@ -252,6 +252,14 @@ public class CoursesController {
         }
     }
 
+    private Decision getDecision(Course course) {
+        if (!course.hasDecision()) {
+            course.setDecision(new Decision());
+            courseService.update(course);
+        }
+        return course.getDecision();
+    }
+
     @RequestMapping(value = "/courses/{courseId}/send_to_review", method = RequestMethod.POST)
     public void sendToReview(final HttpServletResponse resp,
             @ModelAttribute CourseForm courseForm) throws IOException {
@@ -270,6 +278,7 @@ public class CoursesController {
         String userRole = getCurrentUser().getUserRole();
         if (course.getStatus().getName().equals("Proposal")) {
             mav.addObject("course", course);
+            mav.addObject("decision", getDecision(course));
             mav.addObject("userRole", userRole);
         } else {
             mav = new ModelAndView("troublePage");
@@ -282,7 +291,7 @@ public class CoursesController {
             final HttpServletRequest req, final HttpServletResponse resp) throws IOException {
 
         User user = getCurrentUser();
-        Course course = getCourse(COURSE_ID);
+        Course course = getCourse(courseId);
         Decision decision = course.getDecision();
 
         switch (user.getUserRole()) {
@@ -299,6 +308,7 @@ public class CoursesController {
         }
         course.setDecision(decision);
         courseService.update(course);
+        courseService.statusProvider(course);
         resp.sendRedirect("/courses");
     }
 }

@@ -49,6 +49,10 @@ public class Decision implements Serializable {
     }
 
     public Decision() {
+        km_decision = "";
+        km_comment = "";
+        dm_decision = "";
+        dm_comment = "";
     }
 
     public User getDm() {

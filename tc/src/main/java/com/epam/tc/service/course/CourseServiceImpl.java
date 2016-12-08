@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.epam.tc.dao.course.CourseDao;
 import com.epam.tc.model.Category;
 import com.epam.tc.model.User;
+import com.epam.tc.service.status.StatusService;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -15,6 +16,8 @@ public class CourseServiceImpl implements CourseService {
 
     @Autowired
     private CourseDao courseDao;
+    @Autowired
+    private StatusService statusService;
 
     @Override
     public void create(Course course) {
@@ -63,5 +66,18 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public List<Course> getUserCourses(User user, Category category) {
         return courseDao.getUserCourses(user, category);
+    }
+
+    @Override
+    public void statusProvider(Course course) {
+        if ((course.getDecision().getDm_decision().equals("Approve"))
+                && ((course.getDecision().getKm_decision().equals("Approve")))) {
+            course.setStatus(statusService.getByName("New"));
+        }
+        if ((course.getDecision().getDm_decision().equals("Reject"))
+                || ((course.getDecision().getKm_decision().equals("Reject")))) {
+            course.setStatus(statusService.getByName("Rejected"));
+        }
+        courseDao.update(course);
     }
 }

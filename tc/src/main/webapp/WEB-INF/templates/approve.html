@@ -40,7 +40,7 @@
                     <label class="control-label">Decision</label>
                     <div class="controls">
                         <select class="span5" name="dm_decision" required th:disabled="${userRole} != 'Department Manager'">
-                            <option></option>
+                            <option th:text="${decision.dm_decision}"></option>
                             <option>Approve</option>
                             <option>Reject</option>
                         </select>
@@ -51,7 +51,7 @@
                     <div class="controls">
                         <textarea class="span5" required name="dm_comment"
                                   th:disabled="${userRole} != 'Department Manager'"
-                                  th:text="${course.decision.dm_decision}+' '+${course.decision.dm_comment}">
+                                  th:text="${decision.dm_comment}">
                         </textarea>
                     </div>
                 </div>
@@ -63,7 +63,7 @@
                     <label class="control-label">Decision</label>
                     <div class="controls">
                         <select class="span5" name="km_decision" required th:disabled="${userRole} != 'Knowledge Manager'">
-                            <option></option>
+                            <option th:text="${decision.km_decision}"></option>
                             <option>Approve</option>
                             <option>Reject</option>
                         </select>
@@ -73,7 +73,8 @@
                     <label class="control-label">Reason</label>
                     <div class="controls">
                         <textarea class="span5" required name="km_comment"
-                                  th:disabled="${userRole} != 'Knowledge Manager'">
+                                  th:disabled="${userRole} != 'Knowledge Manager'"
+                                  th:text="${decision.km_comment}">
                         </textarea>
                     </div>
                 </div>

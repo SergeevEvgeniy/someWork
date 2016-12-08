@@ -13,7 +13,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -37,9 +36,13 @@ public class Course implements Serializable {
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     private Set<Evaluate> attenders;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "decisionId")
     private Decision decision;
+
+    public boolean hasDecision() {
+        return getDecision() != null;
+    }
 
     public void setDecision(Decision decision) {
         this.decision = decision;
